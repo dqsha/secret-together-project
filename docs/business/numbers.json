@@ -1,0 +1,26 @@
+{
+  "business": "Сервис бронирования столов (Актобе)",
+  "unit": "venue-month",
+  "price": 9900,
+  "variable": [
+    {"label": "Kaspi QR payment fee 0.95%", "cost": 94},
+    {"label": "Simplified-regime tax ~4% of revenue (ESTIMATE, check with accountant)", "cost": 396},
+    {"label": "QR stands and print for the venue, 5 000 one-off spread over 12 months (ESTIMATE)", "cost": 417}
+  ],
+  "fixed_monthly": [
+    {"label": "VPS in Kazakhstan (fst.kz econom, needed for a .kz domain)", "cost": 3950},
+    {"label": ".kz domain, 3 120 RUB a year at reg.ru ≈ 16 600 tenge / 12", "cost": 1383},
+    {"label": "Support SIM with a weekend-evening number (ESTIMATE)", "cost": 3000},
+    {"label": "AI assistant subscription used to build and maintain (ESTIMATE)", "cost": 10000},
+    {"label": "Printing, demo materials, fuel for visits (ESTIMATE)", "cost": 10000}
+  ],
+  "startup": [
+    {"label": "Contract and data-ownership terms checked by a lawyer (ESTIMATE)", "cost": 30000},
+    {"label": "First-year domain + first month of server", "cost": 20550},
+    {"label": "Sales kit: printed table QR stands for the showcase venue and demo (ESTIMATE)", "cost": 20000}
+  ],
+  "days_per_month": 1,
+  "capacity_per_day": 30,
+  "plan_per_day": 15,
+  "ramp_per_day": [0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+}

@@ -1,0 +1,88 @@
+{
+ "n": 20,
+ "seed": 7,
+ "customer": {
+  "business": "Сервис бронирования столов со схемой зала (рабочее название), Актобе",
+  "target": "Owners and managers of restaurants, lounges, karaoke bars and banquet halls in Aktobe, Kazakhstan, who take table bookings by phone, WhatsApp and Instagram Direct today. Prices are in Kazakh tenge; 19 900 tenge is about 42 US dollars. When asked about prices, answer for the MONTHLY fee, in tenge.",
+  "where": "Aktobe, Kazakhstan",
+  "age": [
+   25,
+   55
+  ],
+  "segments": [
+   {
+    "name": "Owner of a small café or lounge (one hall, 10-20 tables)",
+    "share": 0.4,
+    "income": [
+     12000,
+     35000
+    ]
+   },
+   {
+    "name": "Owner of a large restaurant, banquet hall or karaoke complex",
+    "share": 0.3,
+    "income": [
+     35000,
+     120000
+    ]
+   },
+   {
+    "name": "Hired manager or administrator who decides together with the owner",
+    "share": 0.3,
+    "income": [
+     6000,
+     15000
+    ]
+   }
+  ],
+  "behaviours": [
+   {
+    "name": "Notebook loyalist",
+    "share": 0.2,
+    "how": "The hostess writes every booking in a paper notebook; it has worked for years."
+   },
+   {
+    "name": "WhatsApp-first",
+    "share": 0.2,
+    "how": "Almost all bookings arrive in WhatsApp and Instagram Direct and are answered personally."
+   },
+   {
+    "name": "Penny-pincher",
+    "share": 0.15,
+    "how": "Counts every tenge of monthly fees and cancels subscriptions that do not pay off fast."
+   },
+   {
+    "name": "Tech-curious",
+    "share": 0.15,
+    "how": "Already uses a POS like iiko or Quick Resto and Kaspi QR; likes tools that save staff time."
+   },
+   {
+    "name": "Banquet-heavy",
+    "share": 0.15,
+    "how": "Most revenue comes from toi, birthdays and banquets booked weeks ahead with a deposit."
+   },
+   {
+    "name": "Burned before",
+    "share": 0.15,
+    "how": "Paid for an app or a POS add-on before; the staff stopped using it within a month."
+   }
+  ],
+  "objections": [
+   "19 900 tenge every month for something a notebook does for free",
+   "Most of my guests call or write in WhatsApp, they will not book on a website",
+   "My hostess will not use another app on a busy Saturday",
+   "If it breaks on Saturday night, who do I call?",
+   "Is this a real company? I do not want my guests' phone numbers on some unknown site",
+   "We already have iiko and Kaspi, why another system",
+   "No-shows are my real problem, and this does not stop them"
+  ],
+  "habits": [
+   "on Friday and Saturday evenings the venue is full and the phone does not stop",
+   "on weekday evenings half your tables are empty",
+   "a big toi or birthday banquet is booked most weekends",
+   "you post the menu and events on Instagram and get booking requests in Direct",
+   "your hostess changes every few months and each new one needs training"
+  ]
+ },
+ "pitch": "Сервис бронирования столов для заведений Актобе.\nГости бронируют конкретный стол на схеме вашего зала по ссылке из Instagram, 2ГИС или по QR-коду на столе — без звонка и без установки приложения.\nХостес видит в телефоне все брони по дням: статусы (новая, ожидаем, сели, ушли), гости без брони, пересадка, продление времени, звонок и WhatsApp гостю в одно касание.\nМы сами рисуем схему вашего зала с фото столов, настраиваем ссылки и обучаем хостес.\n19 900 ₸ в месяц, настройка 39 000 ₸ один раз. Первый месяц бесплатно. Сделано в Актобе, поддержка в WhatsApp."
+}

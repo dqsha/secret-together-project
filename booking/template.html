@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Бронь столов</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: мягко и спокойно, как хорошая хостес
+   IDEA: стеклянные панели над светом зала — Liquid Glass
+   PICTURE: схема зала и карточки столов с фото
+   COLOUR and TYPE: изумруд и бордо заведения сквозь матовое стекло; системный шрифт iPhone, запасной Manrope
+   LAYOUT: одна колонка до 560px, плавающая стеклянная панель вкладок снизу */
+:root{color-scheme:light dark;--f:-apple-system,"SF Pro Text",Manrope,system-ui,sans-serif;
+--bg:light-dark(#edf1ee,#06100d);--ink:light-dark(#0f1a16,#eef3ef);--mut:light-dark(#56635d,#a3b5ac);
+--gl:light-dark(rgba(255,255,255,.58),rgba(255,255,255,.075));--gl2:light-dark(rgba(255,255,255,.82),rgba(255,255,255,.14));
+--glb:light-dark(rgba(255,255,255,.8),rgba(255,255,255,.15));--hi:light-dark(rgba(255,255,255,.95),rgba(255,255,255,.22));
+--sh:light-dark(rgba(16,40,30,.16),rgba(0,0,0,.55));--line:light-dark(rgba(15,26,22,.1),rgba(255,255,255,.11));
+--em:light-dark(#14825f,#38bd8d);--emd:light-dark(#0b5a42,#1d8661);--acc:light-dark(#c13a56,#ff7690);--amb:light-dark(#c98208,#f4b84a);--red:light-dark(#d43a3a,#ff6b6b);
+--floor:light-dark(rgba(255,255,255,.55),rgba(255,255,255,.04));--sofa:light-dark(#a9bfce,#4a6577);--wall:light-dark(#ddd4bf,#34403a);--dk:light-dark(#2f3633,#5d6a64);
+--bord:light-dark(#9a3445,#8a3341);--vipg:light-dark(rgba(214,230,214,.8),rgba(60,100,75,.25));--vipd:light-dark(rgba(220,218,214,.8),rgba(90,90,100,.22));--emhi:light-dark(#3a9c7b,#62d2a8);--acchi:light-dark(#d0627a,#ff98ac);--acclo:light-dark(#9a2c44,#c95a70);--emsoft:light-dark(rgba(20,130,95,.15),rgba(56,189,141,.18));--emsoft2:rgba(20,130,95,.5);--accsoft:light-dark(rgba(193,58,86,.13),rgba(255,118,144,.18));--accsoft2:rgba(193,58,86,.4);--ambsoft:light-dark(rgba(201,130,8,.16),rgba(244,184,74,.18));--tfree:light-dark(#ffffff,#1b2622)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{background:var(--bg)}
+body{margin:0;color:var(--ink);font:16px/1.45 var(--f);overflow-x:clip;-webkit-tap-highlight-color:transparent;min-height:100vh}
+body::before{content:"";position:fixed;inset:-10%;z-index:-1;background:
+ radial-gradient(38% 30% at 12% 8%,light-dark(#b4e4cf,#0f5a43) 0%,transparent 70%),
+ radial-gradient(34% 28% at 92% 30%,light-dark(#f7c3cf,#5e1a2b) 0%,transparent 70%),
+ radial-gradient(46% 36% at 40% 96%,light-dark(#f2e1bd,#123a4e) 0%,transparent 72%),var(--bg)}
+button,input,select,textarea{font-family:var(--f)}
+.ic{flex:none;display:block}
+.glass{background:var(--gl);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);border:1px solid var(--glb);box-shadow:inset 0 1px 0 var(--hi),0 12px 32px -14px var(--sh);border-radius:26px}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px 140px}
+.top{position:sticky;top:0;z-index:8;padding:8px 10px 0}
+.top .in{max-width:560px;margin:0 auto;display:flex;align-items:center;gap:10px;justify-content:space-between;padding:8px 8px 8px 16px;border-radius:24px}
+.brand{line-height:1.2}.brand b{display:block;font-size:17px}.brand span{font-size:13px;color:var(--mut)}
+.seg{display:inline-flex;padding:3px;border-radius:999px;background:var(--line);gap:2px;flex:none}
+.seg button{border:0;background:none;color:var(--ink);font-weight:600;font-size:14px;padding:8px 14px;border-radius:999px;min-height:38px;cursor:pointer}
+.seg button.on{background:var(--gl2);box-shadow:inset 0 1px 0 var(--hi),0 2px 10px -3px var(--sh);color:var(--em)}
+h1{font-size:32px;line-height:1.08;margin:22px 0 6px;letter-spacing:-.4px;text-wrap:balance}
+h1.s{font-size:26px;margin-top:18px}
+.sub{color:var(--mut);font-size:14px;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.link{color:var(--acc);background:none;border:0;font-size:inherit;font-weight:700;cursor:pointer;padding:6px 0}
+.sec{margin-top:22px}.lab{font-weight:700;font-size:15px;margin:0 2px 8px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--glb);background:var(--gl);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);color:var(--ink);border-radius:18px;padding:7px 14px;min-height:46px;font-weight:600;font-size:15px;cursor:pointer;text-align:center;box-shadow:inset 0 1px 0 var(--hi)}
+.chip small{display:block;font-weight:500;font-size:12px;color:var(--mut)}
+.chip.on{background:linear-gradient(180deg,var(--emhi),var(--emd));border-color:transparent;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 6px 16px -8px var(--em)}.chip.on small{color:#ffffffd8}
+.chip:disabled{opacity:.3;cursor:not-allowed}
+.chip.pill{border-radius:999px;font-size:14px;min-height:40px;padding:6px 14px;display:inline-flex;align-items:center;gap:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px}
+.stepper{display:flex;align-items:center;gap:14px}
+.rbtn{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--ink);background:var(--gl);border:1px solid var(--glb);box-shadow:inset 0 1px 0 var(--hi),0 6px 16px -10px var(--sh)}
+.stepper output{font-size:30px;font-weight:800;min-width:2ch;text-align:center}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:999px;min-height:54px;padding:14px 22px;font-weight:700;font-size:17px;color:#fff;cursor:pointer;
+ background:linear-gradient(180deg,var(--emhi),var(--emd));box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 10px 24px -10px var(--em)}
+.btn.acc{background:linear-gradient(180deg,var(--acchi),var(--acclo));box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 10px 24px -10px var(--acc)}
+.btn.gl{background:var(--gl);color:var(--ink);border:1px solid var(--glb);box-shadow:inset 0 1px 0 var(--hi),0 8px 20px -12px var(--sh)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.sm{min-height:44px;font-size:15px;padding:10px 16px;width:auto}
+.dock{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom));width:min(536px,calc(100% - 20px));z-index:9;padding:10px 10px 10px 18px;display:flex;align-items:center;gap:12px;border-radius:30px}
+.dock .info{flex:1;font-size:14px;line-height:1.3;color:var(--mut)}.dock .info b{display:block;font-size:16px;color:var(--ink)}
+.dock .btn{width:auto;flex:none}
+.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom));width:min(420px,calc(100% - 24px));z-index:9;display:grid;grid-template-columns:repeat(4,1fr);padding:6px;border-radius:32px}
+.tabbar button{position:relative;border:0;background:none;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:2px;font-weight:600;font-size:12px;border-radius:26px;min-height:56px;padding:7px 0 5px;cursor:pointer}
+.tabbar button.on{color:var(--em);background:var(--gl2);box-shadow:inset 0 1px 0 var(--hi),0 4px 14px -6px var(--sh)}
+.badge{position:absolute;top:4px;left:calc(50% + 6px);min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:var(--acc);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center}
+.fab{position:fixed;right:max(16px,calc(50% - 264px));bottom:calc(92px + env(safe-area-inset-bottom));z-index:9;width:58px;height:58px;border-radius:50%;border:0;color:#fff;display:grid;place-items:center;cursor:pointer;
+ background:linear-gradient(180deg,var(--acchi),var(--acclo));box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 12px 26px -10px var(--acc)}
+.map{padding:8px;overflow:auto;border-radius:26px}
+.map svg{display:block;width:100%;height:auto;border-radius:20px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--mut);margin:10px 6px}
+.legend i{display:inline-block;width:13px;height:13px;border-radius:50%;vertical-align:-1px;margin-right:6px}
+.note{font-size:14px;color:var(--mut);margin:8px 4px}
+.card{padding:16px;margin-top:14px}
+.sum{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:15px;margin:0}.sum dt{color:var(--mut)}.sum dd{margin:0;font-weight:700}
+label.f{display:block;margin-top:14px;font-weight:600;font-size:14px;padding-left:4px}
+input,select,textarea{width:100%;font-size:16px;padding:13px 16px;border-radius:18px;border:1px solid var(--glb);background:var(--gl2);color:var(--ink);margin-top:6px;min-height:50px;box-shadow:inset 0 1px 2px var(--line)}
+textarea.code{font:13px/1.4 ui-monospace,Menlo,monospace;min-height:140px}
+.search{position:relative}.search .ic{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--mut)}.search input{padding-left:44px;margin:0}
+:focus-visible{outline:3px solid var(--emsoft2);outline-offset:2px}
+.err{color:var(--acc);font-size:14px;margin:10px 4px 0;font-weight:600}
+.done{text-align:center;padding:26px 4px 6px}
+.tick{width:80px;height:80px;border-radius:50%;display:grid;place-items:center;margin:0 auto 14px;color:#fff;background:linear-gradient(180deg,var(--emhi),var(--emd));box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 14px 30px -12px var(--em)}
+.row{display:flex;gap:10px}.row>*{flex:1}
+.field{display:flex;align-items:center;gap:14px;width:100%;padding:12px 16px 12px 12px;text-align:left;color:var(--ink);cursor:pointer;min-height:68px}
+.fic{width:46px;height:46px;border-radius:16px;display:grid;place-items:center;color:#fff;background:linear-gradient(180deg,var(--emhi),var(--emd));box-shadow:inset 0 1px 0 rgba(255,255,255,.45);flex:none}
+.ft{flex:1}.ft small{display:block;font-size:13px;color:var(--mut);font-weight:600}.ft b{font-size:19px}
+.field>.ic:last-child{color:var(--mut)}
+.navrow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px}
+.backbtn{display:inline-flex;align-items:center;gap:6px;min-height:48px;padding:8px 18px 8px 10px;border-radius:999px;font-weight:700;font-size:16px;cursor:pointer;color:var(--ink);background:var(--gl2);border:1px solid var(--glb);box-shadow:inset 0 1px 0 var(--hi),0 8px 20px -10px var(--sh)}
+.backbtn .ic{color:var(--em)}
+.sumpill{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;width:100%;padding:12px 16px;border-radius:22px;cursor:pointer;color:var(--ink);font-size:15px;font-weight:600;margin-top:8px;text-align:left}
+.sumpill span{display:inline-flex;align-items:center;gap:6px}.sumpill span .ic{color:var(--mut)}.sumpill b{margin-left:auto;color:var(--acc)}
+.calh{display:flex;align-items:center;justify-content:space-between;margin:12px 0 6px}.calh b{font-size:18px}.xbtn:disabled{opacity:.3}
+.calg{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center}
+.cw{font-size:13px;color:var(--mut);font-weight:600;padding:4px 0}
+.cd{aspect-ratio:1;max-height:52px;border:0;border-radius:50%;background:none;color:var(--ink);font-weight:600;font-size:17px;cursor:pointer}
+.cd.td{box-shadow:inset 0 0 0 1.5px var(--em)}.cd.on{background:linear-gradient(180deg,var(--emhi),var(--emd));color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 6px 14px -6px var(--em)}
+.cd:disabled{opacity:.25;cursor:not-allowed}
+.wprev{text-align:center;margin:6px 0 4px}.wprev b{display:block;font-size:44px;letter-spacing:-1px;line-height:1.1}
+.wheels{position:relative;display:flex;justify-content:center;align-items:center;gap:6px;height:240px;margin-top:6px}
+.band{position:absolute;left:12%;right:12%;top:96px;height:48px;border-radius:16px;background:var(--gl2);border:1px solid var(--glb);box-shadow:inset 0 1px 0 var(--hi)}
+.wheel{position:relative;width:96px;height:240px;overflow-y:scroll;scroll-snap-type:y mandatory;overscroll-behavior:contain;scrollbar-width:none;-webkit-mask:linear-gradient(transparent,#000 30%,#000 70%,transparent);mask:linear-gradient(transparent,#000 30%,#000 70%,transparent)}
+.wheel::-webkit-scrollbar{display:none}.wsp{height:96px}
+.wi{height:48px;display:grid;place-items:center;scroll-snap-align:center;font-size:26px;font-weight:600;color:var(--mut);cursor:pointer}
+.wi.on{color:var(--ink);font-weight:800;font-size:30px}.wi.off{opacity:.3}
+.colon{position:relative;font-size:30px;font-weight:800}
+.occ{display:flex;flex-wrap:wrap;gap:8px}.occ .chip{min-height:42px}
+.occtag{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700;color:var(--acc);background:var(--accsoft);padding:3px 9px;border-radius:999px;vertical-align:1px}
+input.phone{font-size:18px;letter-spacing:.3px;font-weight:600}
+.field.sm{min-height:58px;margin-top:4px}.field.sm .fic{width:40px;height:40px;border-radius:14px}.field.sm .ft b{font-size:17px}
+.days{display:flex;gap:8px;overflow-x:auto;padding:6px 6px 8px 2px;scrollbar-width:none;margin-top:6px}.days::-webkit-scrollbar{display:none}
+.dchip,.dcal{position:relative;flex:none;min-width:64px;min-height:84px;border-radius:22px;border:1px solid var(--glb);background:var(--gl);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 var(--hi);color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:8px 10px}
+.dcal{color:var(--em);width:54px}
+.dchip small{font-size:12px;font-weight:600;color:var(--mut);white-space:nowrap}.dchip b{font-size:24px;line-height:1.1;display:grid;place-items:center;min-height:28px}.dchip span{font-size:12px;color:var(--mut)}
+.dchip i{position:absolute;top:-4px;right:-4px;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--acc);color:#fff;font-style:normal;font-size:12px;font-weight:800;display:grid;place-items:center;box-shadow:0 0 0 2px var(--bg)}
+.dchip.on{background:linear-gradient(180deg,var(--emhi),var(--emd));color:#fff;border-color:transparent;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 8px 18px -8px var(--em)}.dchip.on small,.dchip.on span{color:#ffffffd8}
+.dayhead{position:sticky;top:78px;z-index:2;display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 16px;margin-top:18px;border-radius:18px}.dayhead b{font-size:16px}.dayhead span{font-size:13px;color:var(--mut);white-space:nowrap}
+.cd{position:relative}.cdn{position:absolute;left:50%;bottom:2px;transform:translateX(-50%);font-style:normal;font-size:10px;font-weight:800;color:var(--acc);line-height:1}.cd.on .cdn{color:#fff}
+.tcard{contain:paint;transform:translateZ(0)}
+.via{display:flex;gap:12px;align-items:center;justify-content:space-between;font-size:14px;font-weight:600;padding:12px 16px;margin-top:14px;border-color:var(--accsoft2)}
+/* tables grid */
+.tgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+.tcard{position:relative;aspect-ratio:1/1.08;border-radius:26px;overflow:hidden;border:1px solid var(--glb);box-shadow:0 14px 30px -16px var(--sh);cursor:pointer;color:#fff;background:linear-gradient(150deg,#2a6b55,#1c3b31);padding:0;text-align:left}
+.tcard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tcard::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,0) 38%,rgba(0,0,0,0) 52%,rgba(0,0,0,.7) 100%)}
+.tcard .tt{position:absolute;z-index:1;left:12px;right:12px;top:10px;font-size:14px;font-weight:700;line-height:1.25}
+.tcard .tt small{display:block;font-weight:500;font-size:12px;opacity:.9}
+.tcard .tb{position:absolute;z-index:1;left:12px;right:12px;bottom:10px;display:flex;align-items:flex-end;justify-content:space-between;gap:6px}
+.tcard .no{font-size:24px;font-weight:800;line-height:1}.tcard .zn{font-size:12px;opacity:.9;display:block;margin-bottom:2px}
+.tcard .ppl{display:flex;align-items:center;gap:4px;font-weight:700;font-size:15px}
+.dot{position:absolute;z-index:1;top:12px;right:12px;width:11px;height:11px;border-radius:50%;box-shadow:0 0 0 3px rgba(255,255,255,.25),0 0 10px currentColor}
+.dot.free{background:#4ade80;color:#4ade80}.dot.res{background:#fbbf24;color:#fbbf24}.dot.busy{background:#f87171;color:#f87171}
+.tcard .ph{position:absolute;inset:0;display:grid;place-items:center;font-size:56px;font-weight:800;opacity:.18}
+.slider{padding:14px 16px 10px;margin-top:12px}
+.slider .big{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.tbig{display:block;text-align:center;font-size:34px;letter-spacing:-.5px;line-height:1.15;margin-top:2px;white-space:nowrap}
+input[type=range]{-webkit-appearance:none;appearance:none;background:none;border:0;box-shadow:none;padding:0;min-height:36px;margin:6px 0 0}
+input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:999px;background:linear-gradient(90deg,var(--em),var(--emsoft))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-11px;border-radius:50%;background:#fff;border:1px solid var(--glb);box-shadow:0 4px 14px -2px var(--sh),inset 0 1px 0 #fff}
+input[type=range]::-moz-range-track{height:8px;border-radius:999px;background:var(--em)}
+input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:#fff;border:1px solid var(--glb)}
+.ticks{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);padding:0 4px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+/* bookings */
+.cnt{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
+.cnt button{border:1px solid var(--glb);background:var(--gl);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-radius:20px;padding:9px 4px;cursor:pointer;color:var(--ink);box-shadow:inset 0 1px 0 var(--hi);text-align:center;min-height:58px}
+.cnt b{display:block;font-size:22px;line-height:1.1}.cnt span{font-size:12px;color:var(--mut);font-weight:600}
+.cnt button.on{outline:2px solid currentColor;outline-offset:-2px}
+.cnt .k-new b{color:var(--acc)}.cnt .k-wait b{color:var(--amb)}.cnt .k-open b{color:var(--em)}
+.bcard{display:block;width:100%;text-align:left;padding:16px;margin-top:12px;cursor:pointer;color:var(--ink);font-size:15px}
+.bhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.bhead b{font-size:18px}.bhead .z{display:block;color:var(--acc);font-weight:600;font-size:14px}
+.sp{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;padding:6px 11px;border-radius:999px;white-space:nowrap}
+.sp::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.sp.new{background:var(--accsoft);color:var(--acc)}.sp.wait{background:var(--ambsoft);color:var(--amb)}
+.sp.open{background:var(--emsoft);color:var(--em)}.sp.closed,.sp.cancelled{background:var(--line);color:var(--mut)}
+.bwho{margin-top:6px}.bwho b{font-weight:800}.bph{color:var(--mut);font-size:14px}
+.tl{position:relative;height:40px;margin-top:8px}
+.tl .tr{position:absolute;left:0;right:0;top:20px;height:10px;border-radius:999px;background:var(--line)}
+.tl .sg{position:absolute;top:20px;height:10px;border-radius:999px}
+.tl .sg.new{background:var(--acc)}.tl .sg.wait{background:var(--amb)}.tl .sg.open{background:var(--em)}.tl .sg.closed,.tl .sg.cancelled{background:var(--mut);opacity:.5}
+.tl .nw{position:absolute;top:14px;width:3px;height:22px;border-radius:3px;background:var(--red);transform:translateX(-50%)}
+.tl .tm{position:absolute;top:0;font-size:13px;font-weight:700;transform:translateX(-50%);white-space:nowrap;color:var(--ink)}
+.tl .lb{position:absolute;top:32px;font-size:12px;color:var(--mut);transform:translateX(-50%)}
+.tl.wl{height:52px}.tl.wl .lb{top:34px}
+.sgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:14px}
+.sbtn{border:1px solid var(--glb);background:var(--gl);border-radius:20px;min-height:52px;font-weight:700;font-size:15px;color:var(--ink);cursor:pointer;box-shadow:inset 0 1px 0 var(--hi);display:flex;align-items:center;justify-content:center;gap:8px}
+.sbtn.on.new{background:var(--acc);color:#fff}.sbtn.on.wait{background:var(--amb);color:#fff}.sbtn.on.open{background:var(--em);color:#fff}.sbtn.on.closed{background:var(--mut);color:#fff}
+.sbtn.warn{color:var(--acc)}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.acts a,.acts button{font-weight:600;font-size:14px;padding:9px 14px;border-radius:999px;border:1px solid var(--glb);background:var(--gl);color:var(--ink);text-decoration:none;min-height:44px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;box-shadow:inset 0 1px 0 var(--hi)}
+.acts .pri{background:linear-gradient(180deg,var(--emhi),var(--emd));color:#fff;border-color:transparent}.acts .warn{color:var(--acc)}
+.acts button:disabled{opacity:.35}
+/* sheets */
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:560px;border-radius:32px 32px 0 0;padding:10px 16px calc(22px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto;background:light-dark(rgba(248,250,248,.86),rgba(20,30,26,.86));-webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);border:1px solid var(--glb);border-bottom:0;box-shadow:inset 0 1px 0 var(--hi)}
+.grab{width:42px;height:5px;border-radius:999px;background:var(--line);margin:0 auto 12px}
+.sheet h2{margin:0;font-size:22px;line-height:1.2}
+.shead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.xbtn{width:40px;height:40px;border-radius:50%;border:1px solid var(--glb);background:var(--gl);color:var(--ink);display:grid;place-items:center;cursor:pointer;flex:none}
+.hero{position:relative;border-radius:24px;overflow:hidden;aspect-ratio:16/10;margin-top:8px;background:linear-gradient(150deg,#2a6b55,#1c3b31)}
+.hero img{width:100%;height:100%;object-fit:cover;display:block}
+.hero .st{position:absolute;left:12px;top:12px;padding:7px 12px;border-radius:999px;font-weight:700;font-size:14px;color:#fff;background:rgba(0,0,0,.35);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.facts{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-weight:600;font-size:15px}.facts span{display:inline-flex;align-items:center;gap:6px}
+.trow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 4px;border-bottom:1px solid var(--line);cursor:pointer;width:100%;background:none;border-left:0;border-right:0;border-top:0;color:var(--ink);font-size:15px;text-align:left}
+.pal{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:10px}
+.pal button{display:flex;align-items:center;gap:10px;text-align:left;border:1px solid var(--glb);background:var(--gl);color:var(--ink);border-radius:18px;padding:10px;font-weight:600;font-size:14px;min-height:54px;cursor:pointer}
+.panel{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));width:min(540px,calc(100% - 16px));z-index:10;max-height:42vh;overflow:auto;padding:12px 14px;border-radius:28px;background:light-dark(rgba(250,252,250,.88),rgba(22,32,28,.88))}
+body.haspanel .wrap{padding-bottom:52vh}
+.ph2{display:flex;justify-content:space-between;align-items:center;gap:10px}.ph2 b{font-size:18px}
+.pgrid{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:8px;align-items:center}
+.ctl{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600}.ctl span{color:var(--mut);margin-right:2px}
+.ctl button{width:40px;height:40px;border-radius:50%;border:1px solid var(--glb);background:var(--gl);color:var(--ink);font-weight:700;font-size:18px;cursor:pointer;display:grid;place-items:center}
+.ctl b{min-width:3ch;text-align:center;font-size:16px}
+.pin{width:auto;flex:1 1 140px;margin:0;min-height:44px;padding:9px 14px}
+.jn-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.jn-chips button{border:1px solid var(--glb);background:var(--gl);color:var(--ink);font-weight:700;font-size:14px;border-radius:999px;min-width:44px;min-height:40px;cursor:pointer}
+.jn-chips button.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translateX(-50%);padding:12px 18px;border-radius:999px;font-weight:600;font-size:14px;z-index:40;max-width:90vw;text-align:center;background:light-dark(rgba(20,30,26,.88),rgba(240,245,242,.92));color:light-dark(#fff,#0f1a16);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+body.haspanel .toast{bottom:50vh}
+.demo{font-size:13px;color:var(--mut);margin-top:28px;text-align:center}
+.empty{padding:22px 18px;text-align:center;margin-top:14px}
+svg text{font-family:var(--f);pointer-events:none}
+.tbl{cursor:pointer;outline:none}.tbl:focus-visible .b{stroke:var(--acc);stroke-width:3}
+.drag{cursor:grab;touch-action:none}
+.trp{fill:var(--ink);opacity:.035}.fl{fill:var(--floor)}.wl{fill:var(--wall)}.dk{fill:var(--dk)}.sf{fill:var(--sofa)}.sfr{fill:var(--bord)}
+.vg{fill:var(--vipg);stroke:var(--line);stroke-width:2}.vd{fill:var(--vipd);stroke:var(--line);stroke-width:2}.sfg{fill:light-dark(#9fb6a2,#4b6b55)}.aq{fill:light-dark(#8fc3c9,#2f6b72)}
+.df{fill:light-dark(rgba(236,226,204,.7),rgba(255,255,255,.05));stroke:var(--mut);stroke-width:1.2;stroke-dasharray:6 5}
+.dl{fill:var(--mut);font-size:11px;font-weight:600}.dlw{fill:#fff;font-size:12px;font-weight:700}.dls{fill:#fff;font-size:9.5px;font-weight:700}.dlb{fill:var(--mut);font-size:15px;font-weight:700}
+.hit{fill:transparent}.selbox{fill:none;stroke:var(--acc);stroke-width:2.5;stroke-dasharray:5 4;pointer-events:none}
+.n{fill:#fff}.seat{fill:var(--ink);opacity:.2}
+.ok .b,.ac .b{fill:var(--em)}.ok .seat,.mg .seat{fill:var(--em);opacity:.5}
+.mg .b{fill:var(--em);stroke:var(--acc);stroke-width:3;stroke-dasharray:6 4}
+.sel .b,.an .b{fill:var(--acc)}.sel .seat{fill:var(--acc);opacity:.7}.aw .b{fill:var(--amb)}
+.jn .b{fill:var(--acc);opacity:.55}
+.bz .b{fill:light-dark(#c9c4bb,#3d4844)}.bz .n{fill:var(--ink);opacity:.55}
+.sm .b,.fr .b{fill:var(--tfree);stroke:var(--mut);stroke-width:1}.sm .n,.fr .n,.ed .n{fill:var(--ink)}.sm .n{opacity:.45}
+.ed .b{fill:light-dark(#dff0e7,#173a2e);stroke:var(--em);stroke-width:1.5}
+.ed.hl .b{fill:light-dark(#f6dbe1,#4a2229);stroke:var(--acc);stroke-dasharray:4 3}
+@media(prefers-reduced-motion:no-preference){.tbl .b{transition:fill .2s,opacity .2s}.sheet{animation:up .28s cubic-bezier(.2,.8,.2,1)}@keyframes up{from{transform:translateY(40px);opacity:.6}}}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.glass,.chip{background:var(--gl2)}}
+</style>
+</head>
+<body>
+<header class="top"><div class="in glass"><div class="brand"><b id="rname">Ресторан</b><span id="raddr">бронирование столов</span></div>
+<div class="seg"><button data-act="mode" data-v="guest" id="m-guest">Гость</button><button data-act="mode" data-v="admin" id="m-admin">Хостес</button></div></div></header>
+<main class="wrap" id="app"></main>
+<div id="fixed"></div>
+<div id="sheet"></div>
+<script>
+{
+const $=s=>document.querySelector(s);
+const app=$('#app'),sheetBox=$('#sheet'),fixedBox=$('#fixed');
+const KEY='rest-booking-v4';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pd=n=>String(n).padStart(2,'0');
+const ds=d=>`${d.getFullYear()}-${pd(d.getMonth()+1)}-${pd(d.getDate())}`;
+const pdate=s=>{const[y,mo,d]=s.split('-').map(Number);return new Date(y,mo-1,d,12)};
+const WD=['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'],WDS=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+const MON=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'],MS=['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+const human=s=>{const d=pdate(s);return `${WD[d.getDay()]}, ${d.getDate()} ${MON[d.getMonth()]}`};
+const short=s=>{const d=pdate(s);return `${d.getDate()} ${MON[d.getMonth()]}`};
+const m=s=>{const[h,x]=s.split(':').map(Number);return h*60+x};
+const hm=x=>`${pd(Math.floor(((x%1440)+1440)%1440/60))}:${pd(((x%60)+60)%60)}`;
+const plural=(n,a,b,c)=>{const k=n%10,h=n%100;return k===1&&h!==11?a:k>=2&&k<=4&&(h<10||h>=20)?b:c};
+const gw=n=>`${n} ${plural(n,'гость','гостя','гостей')}`;
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const uid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+const durTxt=d=>d?(d%60?`${Math.floor(d/60)} ч ${d%60} мин`:`${d/60} ч`):'до закрытия';
+const ST={new:'Новая',wait:'Ожидаем',open:'Сели',closed:'Ушли',cancelled:'Отменена'};
+const SRC={online:'Забронировано гостем онлайн',host:'Добавлено хостес',walkin:'Гости без брони'};
+const ACT=b=>['new','wait','open'].includes(b.status);
+
+/* ---------- icons ---------- */
+const ICONS={
+ table:'<path d="M4.5 10h15"/><path d="M7 10v8.5M17 10v8.5"/><path d="M5.5 6.8c0-.9.7-1.6 1.6-1.6h9.8c.9 0 1.6.7 1.6 1.6V10h-13z"/>',
+ list:'<path d="M9.5 6.5h10M9.5 12h10M9.5 17.5h10"/><circle cx="5" cy="6.5" r="1.1"/><circle cx="5" cy="12" r="1.1"/><circle cx="5" cy="17.5" r="1.1"/>',
+ plan:'<rect x="3.8" y="3.8" width="16.4" height="16.4" rx="4.5"/><path d="M3.8 12.5h6.7v7.7M14 3.8v5.7h6.2"/>',
+ more:'<path d="M4.5 7.5h9M18 7.5h1.5M4.5 16.5h3M12 16.5h7.5"/><circle cx="15.8" cy="7.5" r="2.2"/><circle cx="9.8" cy="16.5" r="2.2"/>',
+ search:'<circle cx="11" cy="11" r="6.5"/><path d="m16 16 3.8 3.8"/>',
+ phone:'<path d="M7 4.2h2.6l1.5 3.9-1.9 1.3a10 10 0 0 0 5.4 5.4l1.3-1.9 3.9 1.5V17a2.3 2.3 0 0 1-2.4 2.3A14.6 14.6 0 0 1 4.7 6.6 2.3 2.3 0 0 1 7 4.2z"/>',
+ chat:'<path d="M5.2 18.3 4.3 21l3-1a8.3 8.3 0 1 0-2.1-1.7z"/>',
+ clock:'<circle cx="12" cy="12" r="8.4"/><path d="M12 7.8V12l2.8 1.8"/>',
+ users:'<circle cx="9" cy="8.6" r="3.1"/><path d="M3.8 19c.6-2.9 2.7-4.6 5.2-4.6s4.6 1.7 5.2 4.6"/><path d="M15.6 5.8a2.9 2.9 0 0 1 0 5.6M17.6 14.7c1.5.6 2.5 2.1 2.8 4.3"/>',
+ plus:'<path d="M12 5.5v13M5.5 12h13"/>',
+ swap:'<path d="M6.5 8h12l-3.2-3.2M17.5 16h-12l3.2 3.2"/>',
+ check:'<path d="m5.5 12.6 4.2 4.2 8.8-9.3"/>',
+ x:'<path d="M7 7l10 10M17 7 7 17"/>',
+ camera:'<path d="M4.2 8.7a2.5 2.5 0 0 1 2.5-2.5h1.7l1.4-2h4.4l1.4 2h1.7a2.5 2.5 0 0 1 2.5 2.5v7.8a2.5 2.5 0 0 1-2.5 2.5H6.7a2.5 2.5 0 0 1-2.5-2.5z"/><circle cx="12" cy="12.4" r="3.2"/>',
+ sofa:'<path d="M5.5 11V8.7a2.5 2.5 0 0 1 2.5-2.5h8a2.5 2.5 0 0 1 2.5 2.5V11"/><path d="M3.8 13.2a1.9 1.9 0 0 1 3.8 0v1h8.8v-1a1.9 1.9 0 0 1 3.8 0v4.4H3.8z"/><path d="M6.3 17.6v1.6M17.7 17.6v1.6"/>',
+ enter:'<path d="M14 4.5h3.3a2.5 2.5 0 0 1 2.5 2.5v10a2.5 2.5 0 0 1-2.5 2.5H14"/><path d="M4.2 12h10.5M11 8.3l3.7 3.7-3.7 3.7"/>',
+ cal:'<rect x="4" y="5.5" width="16" height="14.5" rx="4"/><path d="M4 10.2h16M8.5 3.6v3.8M15.5 3.6v3.8"/>',
+ undo:'<path d="M9 14 4.8 9.8 9 5.6"/><path d="M5 9.8h9a5.2 5.2 0 0 1 0 10.4h-2.5"/>',
+ trash:'<path d="M5 7.2h14M10 4.3h4M7.2 7.2l.8 11a2 2 0 0 0 2 1.8h4a2 2 0 0 0 2-1.8l.8-11"/>',
+ copy:'<rect x="8.3" y="8.3" width="11.2" height="11.2" rx="3.2"/><path d="M5 15.3V7.5A2.8 2.8 0 0 1 7.8 4.7h7.7"/>',
+ rotate:'<path d="M19 12a7 7 0 1 1-2.2-5.1"/><path d="M19.3 4.3v4h-4"/>',
+ money:'<rect x="3.6" y="6.6" width="16.8" height="10.8" rx="3.4"/><circle cx="12" cy="12" r="2.3"/>',
+ back:'<path d="m14.5 6-6 6 6 6"/>',chev:'<path d="m9.5 6 6 6-6 6"/>',
+ map:'<path d="M9 5.2 4.5 7v12l4.5-1.8 6 2 4.5-1.8v-12L15 7.2z"/><path d="M9 5.2v12M15 7.2v12"/>',
+ grid:'<rect x="4.2" y="4.2" width="6.8" height="6.8" rx="2.3"/><rect x="13" y="4.2" width="6.8" height="6.8" rx="2.3"/><rect x="4.2" y="13" width="6.8" height="6.8" rx="2.3"/><rect x="13" y="13" width="6.8" height="6.8" rx="2.3"/>',
+ bell:'<path d="M6.3 16.5v-5a5.7 5.7 0 0 1 11.4 0v5l1.4 1.5H4.9z"/><path d="M10 20.3a2 2 0 0 0 4 0"/>',
+ party:'<path d="M5 19.5 9.2 7.8l7 7z"/><path d="M14.5 4.5c.3 1.3-.2 2.4-1.3 3M19.5 9.5c-1.3-.3-2.4.2-3 1.3M17.5 4.2v1.5M20 6.5h-1.5"/>'};
+const ic=(n,s=22,w=1.8)=>`<svg class="ic" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]||''}</svg>`;
+
+/* ---------- plan & photos ---------- */
+const PH=__PH__;
+const PLAN=__PLAN__;
+const cp=o=>JSON.parse(JSON.stringify(o));
+const photoSrc=k=>k?(S.photos?.[k]||PH[k]||''):'';
+const T=(id,zone,x,y,w,h,shape,seats,join,n)=>({id,n:n||id,zone,x,y,w,h,shape,seats,join});
+const DEF_SET={name:'Ваш ресторан',addr:'Актобе',open:'12:00',close:'02:00',dur:180,pin:'1234'};
+function seed(){
+ const d=bizToday(),mk=(table,joined,time,dur,guests,name,phone,status,source,comment='')=>({id:uid('b'),no:0,table,joined,date:d,time,dur,guests,name,phone,status,source,comment,created:Date.now()});
+ const a=[mk('16',[],'17:30',180,4,'Мадина','+7 700 000 00 04','open','walkin'),mk('6',[],'18:30',180,2,'Данияр','+7 700 000 00 02','new','online'),
+  mk('3',[],'19:00',180,4,'Айгерим','+7 700 000 00 01','wait','online'),mk('v1',[],'20:00',0,10,'Ерлан','+7 700 000 00 03','wait','host','торт свой'),
+  mk('12',['11'],'20:30',150,4,'Олжас','+7 700 000 00 05','new','online'),mk('1',[],'13:00',120,3,'Жанна','+7 700 000 00 06','closed','online')];
+ a.forEach((b,i)=>b.no=1201+i);a[3].occ='День рождения';a[2].occ='Свидание';return a;
+}
+const fresh=()=>({set:{...DEF_SET},zones:cp(PLAN.zones),tables:cp(PLAN.tables),decor:cp(PLAN.decor),bk:seed(),photos:{},seq:1210});
+let S=null;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+let LS=true;try{localStorage.setItem(KEY+'-t','1');localStorage.removeItem(KEY+'-t')}catch(e){LS=false}
+function save(){if(!LS)return true;try{localStorage.setItem(KEY,JSON.stringify(S));return true}catch(e){toast('Память телефона заполнена — фото не сохранилось');return false}}
+
+/* ---------- time ---------- */
+const O=()=>m(S.set.open);
+const C=()=>{const c=m(S.set.close);return c<=O()?c+1440:c};
+const toAbs=t=>{const x=m(t);return x<O()&&C()>1440?x+1440:x};
+const bs=b=>toAbs(b.time),be=b=>b.dur?bs(b)+b.dur:C();
+const nowMin=()=>{const n=new Date();return n.getHours()*60+n.getMinutes()};
+function bizToday(){const n=new Date(),x=n.getHours()*60+n.getMinutes(),set=S?S.set:DEF_SET,o=m(set.open),c=m(set.close);if(c<=o&&x<c){n.setDate(n.getDate()-1)}return ds(n)}
+const nowAbs=()=>toAbs(hm(nowMin()));
+function slots(step=30,tail=60){const o=[];for(let x=O();x<=C()-tail;x+=step)o.push(x);return o}
+const slotOk=(date,x)=>date!==bizToday()||x>=nowAbs()+20;
+const days=n=>Array.from({length:n},(_,i)=>{const d=pdate(bizToday());d.setDate(d.getDate()+i);return d});
+
+if(!S||!S.tables||!S.set.close)S=fresh();S.photos=S.photos||{};save();
+
+const tab=id=>S.tables.find(t=>t.id===id);
+const zone=id=>S.zones.find(z=>z.id===id);
+const zname=id=>zone(id)?.name||'';
+function covering(id,date,s,e,excl){return S.bk.find(k=>ACT(k)&&k.id!==excl&&k.date===date&&(k.table===id||k.joined.includes(id))&&bs(k)<e&&s<be(k))}
+function joinOrder(t){return t.join.map(tab).filter(o=>o&&o.zone===t.zone).sort((p,q)=>Math.hypot(p.x-t.x,p.y-t.y)-Math.hypot(q.x-t.x,q.y-t.y))}
+const maxCap=t=>t.seats+joinOrder(t).reduce((s,o)=>s+o.seats,0);
+function plan(t,date,s,e,g,excl){
+ if(covering(t.id,date,s,e,excl))return{st:'bz'};
+ if(g<=t.seats)return{st:'ok',joined:[]};
+ let cap=t.seats;const used=[];
+ for(const o of joinOrder(t)){if(covering(o.id,date,s,e,excl))break;cap+=o.seats;used.push(o.id);if(cap>=g)return{st:'mg',joined:used,cap}}
+ return{st:'sm',max:cap};
+}
+const gS=()=>toAbs(ui.time),gE=()=>ui.dur?gS()+ui.dur:C();
+const zoneFree=z=>S.tables.filter(t=>t.zone===z&&['ok','mg'].includes(plan(t,ui.date,gS(),gE(),ui.g).st)).length;
+function tableAt(t,date,T){
+ const L=S.bk.filter(b=>ACT(b)&&b.date===date&&(b.table===t.id||b.joined.includes(t.id))).sort((a,b)=>bs(a)-bs(b));
+ const cur=L.find(b=>bs(b)<=T&&T<be(b));
+ if(cur)return cur.status==='open'?{k:'busy',txt:`Занят до ${hm(be(cur))}`,b:cur}:{k:'res',txt:`Бронь до ${hm(be(cur))}`,sub:`${esc(cur.name)}, с ${cur.time}`,b:cur};
+ const nx=L.find(b=>bs(b)>T);
+ if(nx)return{k:'free',txt:`Свободен до ${nx.time}`,sub:`Бронь с ${nx.time} до ${hm(be(nx))}`,next:nx};
+ return{k:'free',txt:'Свободен'};
+}
+
+let H='';try{H=location.hash}catch(e){}
+const ui={mode:['#admin','#host','#editor'].includes(H)?'admin':'guest',step:1,date:bizToday(),time:'19:00',dur:S.set.dur,g:2,zone:S.zones[0].id,sel:null,selJ:[],via:false,done:null,
+ form:{name:'',phone:'',comment:'',occ:'',cm:false},err:'',authed:false,atab:H==='#editor'?'edit':'tables',adate:bizToday(),T:null,tview:'cards',tzone:'all',tsort:'num',
+ bseg:'act',bf:null,bday:null,calFor:'guest',banq:false,q:'',esel:null,zoom:1,json:'',nb:null,tmp:null};
+function pickTime(){let ss=slots().filter(x=>slotOk(ui.date,x));if(!ss.length){const d=pdate(ui.date);d.setDate(d.getDate()+1);ui.date=ds(d);ss=slots()}
+ const want=toAbs('19:00');if(!ss.includes(toAbs(ui.time)))ui.time=hm(ss.includes(want)?want:ss[0]);autoDur()}
+function autoDur(){ui.dur=toAbs(ui.time)+S.set.dur<=C()?S.set.dur:0}
+function pickT(){if(ui.adate===bizToday())ui.T=clamp(Math.ceil(nowAbs()/15)*15,O(),C()-30);else ui.T=clamp(toAbs('19:00'),O(),C()-30)}
+pickTime();pickT();
+
+/* ---------- timeline ---------- */
+function timeline(b,wide){
+ const o=O(),c=C(),sp=c-o,p=x=>clamp((x-o)/sp*100,0,100),s=bs(b),e=be(b);
+ const step=sp/60>10?2:1;let lb='';for(let h=Math.ceil(o/60);h*60<=c;h+=step)lb+=`<span class="lb" style="left:${p(h*60)}%">${pd(h%24)}</span>`;
+ const now=b.date===bizToday()&&nowAbs()>=o&&nowAbs()<=c?`<i class="nw" style="left:${p(nowAbs())}%"></i>`:'';
+ const mid=(p(s)+p(e))/2;
+ return `<div class="tl ${wide?'wl':''}"><span class="tm" style="left:${clamp(mid,14,86)}%">${b.time} – ${hm(e)}</span><i class="tr"></i><i class="sg ${b.status}" style="left:${p(s)}%;width:${Math.max(1.5,p(e)-p(s))}%"></i>${now}${lb}</div>`;
+}
+
+/* ---------- map ---------- */
+const DT={wall:{c:'wl',rx:1},sofa:{c:'sf',rx:8},sofab:{c:'sfr',rx:4},sofag:{c:'sfg',rx:6},bar:{c:'dk',rx:5,tc:'dlw'},dark:{c:'dk',rx:3,tc:'dls'},
+ dance:{c:'df',tc:'dlb',el:1},stool:{c:'dk',ci:1},roomg:{c:'vg',rx:16},roomd:{c:'vd',rx:16},aqua:{c:'aq',rx:4},text:{tx:1}};
+const DN={wall:'Стена',sofa:'Диван',sofab:'Диван бордовый',sofag:'Диван зелёный',bar:'Бар',dark:'Тёмный блок',dance:'Танцпол',stool:'Барный стул',roomg:'Комната',roomd:'Комната тёмная',aqua:'Аквариум',text:'Надпись'};
+const textBox=d=>{const w=Math.max(30,(d.label||'').length*6.4+10);return d.rot?[16,w]:[w,16]};
+function decorSVG(d,edit){
+ const k=DT[d.t]||DT.dark;let sh='';
+ if(k.el)sh=`<ellipse rx="${d.w/2}" ry="${d.h/2}" class="${k.c}"/>`;
+ else if(k.ci)sh=`<circle r="${d.w/2}" class="${k.c}"/>`;
+ else if(!k.tx)sh=`<rect x="${-d.w/2}" y="${-d.h/2}" width="${d.w}" height="${d.h}" rx="${Math.min(k.rx+2,d.w/2,d.h/2)}" class="${k.c}"/>`;
+ const rot=k.tx?(d.rot||0):(d.h>d.w*1.3?-90:0);
+ const txt=d.label?`<text text-anchor="middle" dominant-baseline="middle" class="${k.tx?'dl':k.tc||'dl'}" ${rot?`transform="rotate(${rot})"`:''}>${esc(d.label)}</text>`:'';
+ let extra='';
+ if(edit){const[w,h]=k.tx?textBox(d):[Math.max(d.w,16),Math.max(d.h,16)];
+  extra=`<rect class="hit" x="${-w/2}" y="${-h/2}" width="${w}" height="${h}"/>`;
+  if(ui.esel?.id===d.id)extra+=`<rect class="selbox" x="${-w/2-4}" y="${-h/2-4}" width="${w+8}" height="${h+8}" rx="8"/>`}
+ return `<g class="dec ${edit?'drag':''}" data-k="d" data-id="${d.id}" transform="translate(${d.x},${d.y})">${sh}${extra}${txt}</g>`;
+}
+function seatDots(t){
+ const n=t.seats,o=[];
+ if(t.shape==='round'){const r=t.w/2+9;for(let i=0;i<n;i++){const a=(n===2?(t.sa==='v'?-Math.PI/2:0):-Math.PI/2)+i*2*Math.PI/n;o.push([r*Math.cos(a),r*Math.sin(a)])}}
+ else{const a=Math.ceil(n/2),b=n-a,hz=t.w>=t.h,L=hz?t.w:t.h,E=(hz?t.h:t.w)/2+9;
+  for(let i=0;i<a;i++){const p=-L/2+L*(i+.5)/a;o.push(hz?[p,-E]:[-E,p])}
+  for(let i=0;i<b;i++){const p=-L/2+L*(i+.5)/b;o.push(hz?[p,E]:[E,p])}}
+ return o.map(([x,y])=>`<circle class="seat" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5"/>`).join('');
+}
+function tableG(t,mode){
+ let c,sub,extra='';
+ if(mode==='edit'){c='ed';sub=t.seats+' м';const s=ui.esel?.k==='t'&&tab(ui.esel.id);
+  if(s&&s.id!==t.id&&s.join.includes(t.id))c+=' hl';
+  if(s&&s.id===t.id)extra=`<rect class="selbox" x="${-t.w/2-14}" y="${-t.h/2-14}" width="${t.w+28}" height="${t.h+28}" rx="14"/>`}
+ else if(mode==='admin'){const st=tableAt(t,ui.adate,ui.T);
+  if(st.b){c={new:'an',wait:'aw',open:'ac'}[st.b.status];sub=st.b.table===t.id?st.b.name.split(/[ ,]/)[0].slice(0,7):'к '+(tab(st.b.table)?.n||'')}else{c='fr';sub=t.seats+' м'}}
+ else{const p=plan(t,ui.date,gS(),gE(),ui.g);
+  if(ui.sel===t.id){c='sel';sub=ui.g+' гост.'}
+  else if(ui.selJ.includes(t.id)){c='jn';sub='к '+tab(ui.sel).n}
+  else{c=p.st;sub=p.st==='ok'?t.seats+' м':p.st==='mg'?`${t.seats}→${ui.g}`:p.st==='sm'?'до '+p.max:'занят'}}
+ const body=t.shape==='round'?`<circle class="b" r="${t.w/2}"/>`:`<rect class="b" x="${-t.w/2}" y="${-t.h/2}" width="${t.w}" height="${t.h}" rx="${Math.min(10,t.w/3,t.h/3)}"/>`;
+ const act=mode==='edit'?`data-k="t"`:`data-act="table" tabindex="0" role="button"`;
+ return `<g class="tbl ${c} ${mode==='edit'?'drag':''}" data-id="${esc(t.id)}" ${act} transform="translate(${t.x},${t.y})" aria-label="Стол ${esc(t.n)}, ${t.seats} мест">${extra}${seatDots(t)}${body}<text class="n" y="-5" text-anchor="middle" dominant-baseline="middle" font-size="14" font-weight="800">${esc(t.n)}</text><text class="n" y="10" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="600">${esc(sub)}</text></g>`;
+}
+function mapSVG(zid,mode){
+ const z=zone(zid)||S.zones[0],edit=mode==='edit';
+ return `<svg id="mapsvg" viewBox="0 0 360 ${z.h}" style="${edit?`width:${ui.zoom*100}%`:''}" role="img" aria-label="Схема: ${esc(z.name)}"><defs><pattern id="tri" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M0 0H40L0 40Z" class="trp"/><path d="M40 40H20L40 20Z" class="trp"/></pattern></defs>
+ <rect width="360" height="${z.h}" rx="18" class="fl"/><rect width="360" height="${z.h}" rx="18" fill="url(#tri)"/>
+ ${S.decor.filter(d=>d.z===z.id).map(d=>decorSVG(d,edit)).join('')}${S.tables.filter(t=>t.zone===z.id).map(t=>tableG(t,mode)).join('')}</svg>`;
+}
+const zoneTabs=(cur,counts,add,all)=>`<div class="chips" style="margin-top:12px">${all?`<button class="chip pill ${cur==='all'?'on':''}" data-act="${all}" data-v="all">Все залы</button>`:''}${S.zones.map(z=>`<button class="chip ${all?'pill':''} ${z.id===cur?'on':''}" data-act="${all||'zone'}" data-v="${z.id}">${esc(z.name)}${counts?`<small>свободно: ${zoneFree(z.id)}</small>`:''}</button>`).join('')}${add?`<button class="chip pill" data-act="z-add">${ic('plus',18)}Зона</button>`:''}</div>`;
+function dayLabel(v){const t=new Date(),tm=new Date();tm.setDate(tm.getDate()+1);if(v===ds(t))return 'Сегодня';if(v===ds(tm))return 'Завтра';if(v===bizToday())return 'Эта ночь';return WDS[pdate(v).getDay()]}
+const dateChips=(cur,act)=>`<div class="chips">${days(15).map(d=>ds(d)).filter(v=>act!=='date'||slots().some(x=>slotOk(v,x))).slice(0,14).map(v=>{const d=pdate(v);return `<button class="chip ${v===cur?'on':''}" data-act="${act}" data-v="${v}">${dayLabel(v)}<small>${d.getDate()} ${MS[d.getMonth()]}</small></button>`}).join('')}</div>`;
+const tableCard=(t,photoFirst)=>{const src=photoSrc(t.photo);return src?`<img src="${src}" alt="" decoding="async">`:`<span class="ph">${esc(t.n)}</span>`};
+
+/* ---------- guest ---------- */
+const OCC=['Свидание','День рождения','Годовщина','Свадьба','Помолвка','Юбилей','Встреча с друзьями','Семейный ужин','Деловая встреча','Корпоратив','Девичник','Мальчишник','Выпускной','Кыз узату','Тусау кесер','Сундет той','Новый год','14 февраля','8 Марта','Наурыз'];
+function fmtPhone(v){v=String(v).trim();let d=v.replace(/\D/g,'');if(v.startsWith('+7'))d=d.slice(1);if(d.length>=11&&/^[78]/.test(d))d=d.slice(1);d=d.slice(0,10);
+ let o='+7 ';if(!d)return o;o+='('+d.slice(0,3);if(d.length>=3)o+=')';if(d.length>3)o+=' '+d.slice(3,6);if(d.length>6)o+='-'+d.slice(6,8);if(d.length>8)o+='-'+d.slice(8,10);return o}
+const phoneDigits=v=>String(v).replace(/\D/g,'').replace(/^7/,'');
+function phoneErr(v){const d=phoneDigits(v);if(d.length<10)return 'Введите номер полностью: 10 цифр после +7';if(d[0]!=='7')return 'Номер в Казахстане начинается на +7 7…';return ''}
+const DURS=[90,120,180,240,0];
+function guest(){
+ if(!zone(ui.zone))ui.zone=S.zones[0].id;
+ const via=ui.via?`<div class="glass via"><span>Бронь по звонку — сразу подтверждена</span><button class="link" data-act="via-exit">Отмена</button></div>`:'';
+ if(ui.step===1){
+  const d=pdate(ui.date);
+  return `${via}<div class="sub" style="margin-top:20px"><span></span><span>Шаг 1 из 3</span></div><h1 style="margin-top:4px">Забронируйте стол</h1>
+  <div class="sec"><div class="lab">Когда?</div><button class="field glass" data-act="cal-open"><span class="fic">${ic('cal',24)}</span><span class="ft"><small>Дата</small><b>${dayLabel(ui.date)}, ${d.getDate()} ${MON[d.getMonth()]}</b></span>${ic('chev',22,2)}</button></div>
+  <div class="sec"><div class="lab">Во сколько?</div><button class="field glass" data-act="clock-open"><span class="fic">${ic('clock',24)}</span><span class="ft"><small>Время</small><b>${ui.time}</b></span>${ic('chev',22,2)}</button>
+  <p class="note">Стол будет за вами до ${hm(gE())}</p></div>
+  <div class="sec"><div class="lab">Сколько человек?</div><div class="stepper"><button class="rbtn" data-act="g-" aria-label="Меньше"><b style="font-size:24px;line-height:1">−</b></button><output>${ui.g}</output><button class="rbtn" data-act="g+" aria-label="Больше">${ic('plus',22,2.2)}</button><span class="note">${plural(ui.g,'человек','человека','человек')}</span></div>
+  ${ui.g>8?'<p class="note">Для большой компании сдвинем столы или предложим VIP-комнату.</p>':''}</div>
+  <div class="dock glass"><div class="info"><b>${short(ui.date)}, ${ui.time}</b>${ui.g} ${plural(ui.g,'человек','человека','человек')}</div><button class="btn" data-act="go" data-v="2">Выбрать стол ${ic('chev',20,2.2)}</button></div>`;
+ }
+ if(ui.step===2){
+  const total=S.zones.reduce((s,z)=>s+zoneFree(z.id),0),t=ui.sel&&tab(ui.sel);
+  const info=t?`<b>Стол ${esc(t.n)} · ${esc(zname(t.zone))}</b>${ui.selJ.length?'сдвинем со столами '+ui.selJ.map(i=>esc(tab(i).n)).join(', '):t.seats+' '+plural(t.seats,'место','места','мест')}`:`<b>Нажмите на зелёный стол</b>${gw(ui.g)}`;
+  return `${via}<div class="navrow"><button class="backbtn" data-act="go" data-v="1">${ic('back',22,2.4)}Назад</button><span class="note" style="margin:0">Шаг 2 из 3</span></div><h1 style="margin-top:10px">Выберите стол</h1>
+  <button class="sumpill glass" data-act="go" data-v="1"><span>${ic('cal',18)}${short(ui.date)}</span><span>${ic('clock',18)}${ui.time}</span><span>${ic('users',18)}${ui.g}</span><b>Изменить</b></button>
+  ${zoneTabs(ui.zone,true)}
+  ${total?'':`<div class="glass empty"><b>На это время свободных столов нет</b><p class="note">Попробуйте время на полчаса раньше или позже.</p><button class="btn gl" data-act="go" data-v="1">Выбрать другое время</button></div>`}
+  <div class="map glass">${mapSVG(ui.zone,'guest')}</div>
+  <div class="legend"><span><i style="background:var(--em)"></i>Свободен</span><span><i style="background:var(--em);outline:2px dashed var(--acc);outline-offset:-2px"></i>Сдвинем столы</span><span><i style="background:var(--tfree);border:1px solid var(--mut)"></i>Мало мест</span><span><i style="background:light-dark(#c9c4bb,#3d4844)"></i>Занят</span><span><i style="background:var(--acc)"></i>Ваш выбор</span></div>
+  <p class="note" style="text-align:center">Нажмите на зелёный стол, чтобы посмотреть его и выбрать</p>`;
+ }
+ if(ui.step===3){
+  const t=tab(ui.sel);
+  return `${via}<div class="navrow"><button class="backbtn" data-act="go" data-v="2">${ic('back',22,2.4)}К выбору стола</button><span class="note" style="margin:0">Шаг 3 из 3</span></div><h1 style="margin-top:10px">Ваши данные</h1>
+  <div class="glass card">${summary({date:ui.date,time:ui.time,dur:ui.dur,table:ui.sel,joined:ui.selJ,guests:ui.g,occ:ui.form.occ})}</div>
+  <label class="f">Имя<input id="f-name" autocomplete="name" value="${esc(ui.form.name)}" placeholder="Как к вам обращаться"></label>
+  <label class="f">Телефон<input id="f-phone" class="phone" type="tel" inputmode="numeric" autocomplete="tel" value="${esc(ui.form.phone||'+7 ')}" placeholder="+7 (7__) ___-__-__"></label>
+  <div class="sec" style="margin-top:18px"><div class="lab">Повод</div><button class="field glass" data-act="occ-open"><span class="fic">${ic('party',24)}</span><span class="ft"><small>${ui.form.occ?'Повод':'Можно не выбирать'}</small><b>${esc(ui.form.occ||'Без повода')}</b></span>${ic('chev',22,2)}</button></div>
+  ${ui.form.cm||ui.form.comment?`<label class="f">Комментарий<textarea id="f-comment" rows="2" placeholder="Детский стул, свой торт…">${esc(ui.form.comment)}</textarea></label>`:`<button class="link" style="margin-top:12px;padding:10px 4px" data-act="cm">${ic('plus',16,2.4).replace('class="ic"','class="ic" style="display:inline;vertical-align:-3px"')} Добавить комментарий</button>`}
+  ${ui.err?`<div class="err">${esc(ui.err)}</div>`:''}
+  <div class="dock glass"><div class="info"><b>Стол ${esc(t.n)}, ${ui.time}</b>${ui.g} ${plural(ui.g,'человек','человека','человек')}</div><button class="btn acc" data-act="book">Забронировать</button></div>`;
+ }
+ const b=ui.done;
+ return `<div class="done"><div class="tick">${ic('check',40,2.6)}</div>
+  <h1 style="margin-top:0">Стол забронирован</h1><p class="note">${b.status!=='new'?'Бронь сразу подтверждена.':'Администратор подтвердит бронь звонком или в WhatsApp.'}</p></div>
+  <div class="glass card">${summary(b)}<dl class="sum" style="margin-top:6px"><dt>Имя</dt><dd>${esc(b.name)}</dd><dt>Телефон</dt><dd>${esc(b.phone)}</dd><dt>Заявка</dt><dd>№${b.no}</dd></dl></div>
+  <p class="note" style="text-align:center">Сохраните скриншот — его можно показать на входе.</p>
+  <div class="sec">${ui.via?'<button class="btn" data-act="via-exit">Вернуться к хостес</button>':'<button class="btn gl" data-act="new">Новая бронь</button>'}</div>`;
+}
+function summary(b){
+ const t=tab(b.table);
+ return `<dl class="sum"><dt>Дата</dt><dd>${human(b.date)}</dd><dt>Время</dt><dd>${b.time} – ${hm(b.dur?toAbs(b.time)+b.dur:C())}</dd>
+ <dt>Стол</dt><dd>№${esc(t?t.n:'?')} · ${t?esc(zname(t.zone)):''}${b.joined.length?`<br><span style="font-weight:500;color:var(--mut)">сдвинем со столами ${b.joined.map(i=>esc(tab(i)?.n||'?')).join(', ')}</span>`:''}</dd><dt>Человек</dt><dd>${b.guests}</dd>${b.occ?`<dt>Повод</dt><dd>${esc(b.occ)}</dd>`:''}</dl>`;
+}
+
+/* ---------- host ---------- */
+const digits=p=>{let d=String(p).replace(/\D/g,'');if(d.length===11&&d[0]==='8')d='7'+d.slice(1);if(d.length===10)d='7'+d;return d};
+function waLink(b){const t=tab(b.table);const txt=`Здравствуйте, ${b.name}! Ваша бронь в «${S.set.name}»: ${human(b.date)}, ${b.time}, стол №${t?t.n:''}, гостей: ${b.guests}${b.occ?`, повод: ${b.occ}`:''}. Ждём вас!`;return `https://wa.me/${digits(b.phone)}?text=${encodeURIComponent(txt)}`}
+const newCount=()=>S.bk.filter(b=>b.status==='new'&&b.date>=bizToday()).length;
+function host(){
+ if(!ui.authed)return `<h1>Вход для хостес</h1><p class="note">Введите PIN-код. В демо он 1234.</p>
+  <label class="f">PIN<input id="pin" type="password" inputmode="numeric" autocomplete="off"></label>${ui.err?`<div class="err">${esc(ui.err)}</div>`:''}
+  <div class="sec"><button class="btn" data-act="pin">Войти</button></div>`;
+ if(!zone(ui.zone))ui.zone=S.zones[0].id;
+ if(ui.atab==='tables')return hostTables();
+ if(ui.atab==='list')return hostList();
+ if(ui.atab==='edit')return editor();
+ const s=S.set;
+ return `<h1 class="s">Настройки</h1>
+ <label class="f">Название заведения<input id="s-name" value="${esc(s.name)}"></label>
+ <label class="f">Адрес<input id="s-addr" value="${esc(s.addr)}"></label>
+ <div class="row"><label class="f">Открываемся<input id="s-open" type="time" step="1800" value="${s.open}"></label><label class="f">Закрываемся<input id="s-close" type="time" step="1800" value="${s.close}"></label></div>
+ <label class="f">Бронь по умолчанию<select id="s-dur">${[60,90,120,150,180,210,240,300].map(v=>`<option value="${v}" ${v===s.dur?'selected':''}>${durTxt(v)}</option>`).join('')}</select></label>
+ <label class="f">PIN хостес<input id="s-pin" inputmode="numeric" value="${esc(s.pin)}"></label>
+ ${ui.err?`<div class="err">${esc(ui.err)}</div>`:''}
+ <div class="sec"><button class="btn" data-act="save-set">Сохранить</button></div>
+ <div class="sec"><button class="btn gl" data-act="reset-all">Сбросить демо-брони и схему</button></div>`;
+}
+function hostTables(){
+ const o=O(),c=C();
+ return `<h1 class="s">Подобрать столик</h1><button class="field glass sm" data-act="cal-open" data-v="tables"><span class="fic">${ic('cal',22)}</span><span class="ft"><small>Дата</small><b>${dayTitle(ui.adate)}</b></span>${ic('chev',22,2)}</button>
+ <div class="glass slider"><div class="big"><span class="note" style="margin:0">Свободные столы</span><span class="note" style="margin:0;white-space:nowrap">работаем ${S.set.open}–${S.set.close}</span></div><b id="tval" class="tbig">с ${hm(ui.T)}</b>
+ <input type="range" id="trange" min="${o}" max="${c-30}" step="15" value="${ui.T}" aria-label="Время">
+ <div class="ticks">${[0,1,2,3,4].map(i=>`<span>${hm(Math.round((o+(c-30-o)*i/4)/30)*30)}</span>`).join('')}</div></div>
+ <div class="tools"><div class="seg"><button class="${ui.tview==='cards'?'on':''}" data-act="tview" data-v="cards" aria-label="Карточки">${ic('grid',20)}</button><button class="${ui.tview==='map'?'on':''}" data-act="tview" data-v="map" aria-label="Схема">${ic('map',20)}</button></div>
+ ${ui.tview==='cards'?`<div class="seg"><button class="${ui.tsort==='num'?'on':''}" data-act="tsort" data-v="num">По порядку</button><button class="${ui.tsort==='free'?'on':''}" data-act="tsort" data-v="free">Свободные</button></div>`:''}</div>
+ ${ui.tview==='cards'?zoneTabs(ui.tzone,false,false,'tzone'):zoneTabs(ui.zone,false)}
+ <div id="tlist">${tablesBody()}</div>`;
+}
+function tablesBody(){
+ if(ui.tview==='map')return `<div class="map glass" style="margin-top:6px">${mapSVG(ui.zone,'admin')}</div><div class="legend"><span><i style="background:var(--tfree);border:1px solid var(--mut)"></i>Свободен</span><span><i style="background:var(--acc)"></i>Новая</span><span><i style="background:var(--amb)"></i>Ожидаем</span><span><i style="background:var(--em)"></i>Сели</span></div>`;
+ let L=S.tables.filter(t=>ui.tzone==='all'||t.zone===ui.tzone).map(t=>({t,st:tableAt(t,ui.adate,ui.T)}));
+ const num=x=>{const n=parseInt(x.t.n,10);return isNaN(n)?999:n};
+ L.sort((a,b)=>ui.tsort==='free'?(['free','res','busy'].indexOf(a.st.k)-['free','res','busy'].indexOf(b.st.k))||num(a)-num(b):num(a)-num(b));
+ if(!L.length)return `<div class="glass empty">В этой зоне пока нет столов. Добавьте их во вкладке «Схема».</div>`;
+ return `<div class="tgrid">${L.map(({t,st})=>`<button class="tcard" data-act="tsheet" data-id="${esc(t.id)}">${tableCard(t)}<i class="dot ${st.k}"></i>
+  <span class="tt">${st.txt}${st.sub?`<small>${st.sub}</small>`:''}</span>
+  <span class="tb"><span><span class="zn">${esc(zname(t.zone))}</span><span class="no">№${esc(t.n)}</span></span><span class="ppl">${ic('users',18)}${t.seats}</span></span></button>`).join('')}</div>`;
+}
+const capf=x=>x.charAt(0).toUpperCase()+x.slice(1);
+const dayTitle=d=>{const l=dayLabel(d);return ['Сегодня','Завтра','Эта ночь'].includes(l)?`${l}, ${short(d)}`:capf(human(d))};
+function hostList(){
+ const today=bizToday(),act=ui.bseg==='act';
+ const base=act?S.bk.filter(b=>ACT(b)&&b.date>=today):S.bk.filter(b=>!ACT(b));
+ const scope=ui.bday?base.filter(b=>b.date===ui.bday):base;
+ const cnt=k=>scope.filter(b=>b.status===k).length;
+ let L=scope;if(act&&ui.bf)L=L.filter(b=>b.status===ui.bf);if(ui.banq)L=L.filter(b=>b.guests>=10);
+ const q=ui.q.trim().toLowerCase();if(q)L=L.filter(b=>b.name.toLowerCase().includes(q)||digits(b.phone).includes(q.replace(/\D/g,'').replace(/^8/,'7')||'§'));
+ const dir=act?1:-1;L=L.slice().sort((a,b)=>(a.date<b.date?-dir:a.date>b.date?dir:0)||dir*(bs(a)-bs(b)));
+ const dates=[...new Set(base.map(b=>b.date))].sort();if(!act)dates.reverse();
+ const per=d=>base.filter(b=>b.date===d).length,nw=base.filter(b=>b.status==='new').length;
+ const groups=[];for(const b of L){const g=groups[groups.length-1];if(g&&g[0]===b.date)g[1].push(b);else groups.push([b.date,[b]])}
+ return `<h1 class="s">Заявки</h1><p class="note" style="margin-top:0">${act?`Предстоящих: <b style="color:var(--ink)">${base.length}</b>${nw?` · новых: <b style="color:var(--acc)">${nw}</b>`:''}`:`Закрытых и отменённых: ${base.length}`}</p>
+ <div class="days"><button class="dcal" data-act="cal-open" data-v="list" aria-label="Календарь">${ic('cal',24)}</button><button class="dchip ${!ui.bday?'on':''}" data-act="bday" data-v=""><small>Все</small><b>${ic('list',22)}</b><i>${base.length}</i></button>${dates.map(d=>{const p=pdate(d),l=dayLabel(d);return `<button class="dchip ${ui.bday===d?'on':''}" data-act="bday" data-v="${d}"><small>${['Сегодня','Завтра','Эта ночь'].includes(l)?l:WDS[p.getDay()]}</small><b>${p.getDate()}</b><span>${MS[p.getMonth()]}</span><i>${per(d)}</i></button>`}).join('')}</div>
+ <div class="tools"><div class="seg"><button class="${act?'on':''}" data-act="bseg" data-v="act">Предстоящие</button><button class="${!act?'on':''}" data-act="bseg" data-v="done">Закрытые</button></div>
+ <button class="chip pill ${ui.banq?'on':''}" data-act="banq">${ic('party',18)}Банкеты 10+</button></div>
+ ${act?`<div class="cnt">${[['new','Новые'],['wait','Ожидаем'],['open','Сели']].map(([k,v])=>`<button class="k-${k} ${ui.bf===k?'on':''}" data-act="bf" data-v="${k}"><b>${cnt(k)}</b><span>${v}</span></button>`).join('')}<button data-act="bf" data-v=""><b>${scope.reduce((s,b)=>s+b.guests,0)}</b><span>Гостей</span></button></div>`:''}
+ <div class="search" style="margin-top:12px">${ic('search',20)}<input id="q" type="search" placeholder="Телефон или имя гостя" value="${esc(ui.q)}"></div>
+ <div id="blist">${groups.length?groups.map(([d,arr])=>`<div class="dayhead glass"><b>${dayTitle(d)}</b><span>${arr.length} ${plural(arr.length,'заявка','заявки','заявок')} · ${arr.reduce((s,b)=>s+b.guests,0)} гост.</span></div>${arr.map(bcard).join('')}`).join(''):`<div class="glass empty">${q?'Никого не нашли':ui.bday?'На этот день заявок нет':'Заявок пока нет'}</div>`}</div>`;
+}
+function bcard(b){
+ const t=tab(b.table),names=[b.table,...b.joined].map(i=>esc(tab(i)?.n||'?')).join(' + ');
+ return `<button class="glass bcard" data-act="bsheet" data-id="${b.id}"><div class="bhead"><div><b>Стол №${names}</b><span class="z">${esc(zname(t?.zone))}</span></div><span class="sp ${b.status}">${ST[b.status]}</span></div>
+ <div class="bwho">${esc(b.name)} <b>${b.guests} чел.</b>${b.occ?` <span class="occtag">${ic('party',14)}${esc(b.occ)}</span>`:''}</div><div class="bph">${esc(b.phone)||'без телефона'}${b.comment?' · '+esc(b.comment):''}</div>${timeline(b)}</button>`;
+}
+
+/* ---------- editor ---------- */
+let undo=[];
+const snap=()=>{undo.push(JSON.stringify({z:S.zones,t:S.tables,d:S.decor}));if(undo.length>50)undo.shift()};
+function editor(){
+ const z=zone(ui.zone);
+ return `<h1 class="s">Схема зала</h1>
+ <p class="note">Тяните пальцем стол, диван, стену — что угодно. Нажмите на предмет — внизу появятся его настройки.</p>
+ ${zoneTabs(ui.zone,false,true)}
+ <div class="acts" style="margin:4px 0 10px"><button class="pri" data-act="add">${ic('plus',18,2.2)}Добавить</button><button data-act="undo" ${undo.length?'':'disabled'}>${ic('undo',18)}Отменить</button>
+ <button data-act="zoom" data-v="-0.5" ${ui.zoom<=1?'disabled':''} aria-label="Уменьшить">−</button><span class="note" style="margin:0;align-self:center">${Math.round(ui.zoom*100)}%</span><button data-act="zoom" data-v="0.5" ${ui.zoom>=3?'disabled':''} aria-label="Увеличить">${ic('plus',18)}</button></div>
+ <div class="map glass">${mapSVG(ui.zone,'edit')}</div>
+ <div class="glass card"><div class="lab">Зона «${esc(z.name)}»</div>
+  <label class="f" style="margin-top:0">Название<input id="z-name" value="${esc(z.name)}"></label>
+  <div class="pgrid"><div class="ctl"><span>Длина зала</span><button data-act="z-h" data-v="-40">−</button><b>${z.h}</b><button data-act="z-h" data-v="40">+</button></div>
+  <div class="acts" style="margin:0"><button class="warn" data-act="z-del">${ic('trash',18)}Удалить зону</button></div></div></div>
+ <div class="glass card"><div class="lab">Файл схемы</div>
+  <p class="note" style="margin-top:0">Скопируйте схему и пришлите её мне в чат или сохраните в заметки. Фото столов в текст не входят.</p>
+  <div class="acts"><button class="pri" data-act="copy-json">${ic('copy',18)}Скопировать схему</button><button data-act="show-in">Вставить схему</button><button class="warn" data-act="reset-plan">Сбросить к исходной</button></div>
+  ${ui.json==='out'?`<textarea class="code" id="j-out" readonly>${esc(planJSON())}</textarea>`:''}
+  ${ui.json==='in'?`<textarea class="code" id="j-in" placeholder="Вставьте сюда текст схемы"></textarea><div class="acts"><button class="pri" data-act="load-json">Загрузить</button></div>`:''}</div>`;
+}
+const planJSON=()=>JSON.stringify({v:1,name:S.set.name,zones:S.zones,tables:S.tables,decor:S.decor});
+const curItem=()=>ui.esel?(ui.esel.k==='t'?tab(ui.esel.id):S.decor.find(d=>d.id===ui.esel.id)):null;
+const ctl=(lab,act,v,val)=>`<div class="ctl"><span>${lab}</span><button data-act="${act}" data-v="${v}:-1" aria-label="Меньше">−</button><b>${val}</b><button data-act="${act}" data-v="${v}:1" aria-label="Больше">+</button></div>`;
+function panel(){
+ const it=curItem();
+ if(!it||ui.mode!=='admin'||ui.atab!=='edit'){ui.esel=null;return ''}
+ const isT=ui.esel.k==='t',round=isT?it.shape==='round':it.t==='stool',isText=!isT&&it.t==='text';
+ let h=`<div class="ph2"><b>${isT?`Стол ${esc(it.n)}`:DN[it.t]||'Предмет'}</b><button class="btn sm" data-act="sel-close">${ic('check',18,2.4)}Готово</button></div><div class="pgrid">
+  <input class="pin" id="p-label" value="${esc(isT?it.n:it.label)}" placeholder="${isT?'Номер стола':'Подпись'}" aria-label="${isT?'Номер стола':'Подпись'}">`;
+ if(isT)h+=ctl('Мест','p-seat','s',it.seats)+`<div class="seg"><button class="${!round?'on':''}" data-act="p-shape" data-v="rect">Прямоуг.</button><button class="${round?'on':''}" data-act="p-shape" data-v="round">Круглый</button></div>`;
+ if(!isText)h+=round?ctl('Размер','p-size','w',it.w):ctl('Ширина','p-size','w',it.w)+ctl('Длина','p-size','h',it.h);
+ h+=`</div><div class="pgrid"><div class="ctl"><span>Сдвинуть</span><button data-act="mv" data-v="-5,0" aria-label="Влево">←</button><button data-act="mv" data-v="0,-5" aria-label="Вверх">↑</button><button data-act="mv" data-v="0,5" aria-label="Вниз">↓</button><button data-act="mv" data-v="5,0" aria-label="Вправо">→</button></div></div>
+ <div class="acts">${isT?`<button class="pri" data-act="props" data-id="${esc(it.id)}">${ic('camera',18)}Фото и описание</button>`:''}<button data-act="rot">${ic('rotate',18)}Повернуть</button><button data-act="dup">${ic('copy',18)}Копия</button>${isT?'':'<button data-act="back">Под другие</button>'}<button class="warn" data-act="del">${ic('trash',18)}Удалить</button></div>`;
+ if(isT){const others=S.tables.filter(o=>o.zone===it.zone&&o.id!==it.id);
+  h+=`<div class="lab" style="margin:14px 2px 0">Можно сдвинуть со столами</div><div class="jn-chips">${others.map(o=>`<button class="${it.join.includes(o.id)?'on':''}" data-act="p-join" data-id="${esc(o.id)}">${esc(o.n)}</button>`).join('')||'<span class="note">В зоне нет других столов</span>'}</div>
+  <p class="note">Максимум при сдвиге: ${maxCap(it)} мест.</p>`}
+ return `<div class="panel glass">${h}</div>`;
+}
+const PAL=[
+ ['Стол на 4','t',{shape:'rect',w:56,h:56,seats:4}],['Стол на 6','t',{shape:'rect',w:80,h:50,seats:6}],['Круглый на 2','t',{shape:'round',w:30,h:30,seats:2}],
+ ['Круглый на 4','t',{shape:'round',w:44,h:44,seats:4}],['Большой стол на 12','t',{shape:'rect',w:200,h:60,seats:12}],
+ ['Диван','d',{t:'sofa',w:100,h:18}],['Диван бордовый','d',{t:'sofab',w:60,h:12}],['Диван зелёный','d',{t:'sofag',w:100,h:16}],
+ ['Стена','d',{t:'wall',w:120,h:7}],['Перегородка, колонна','d',{t:'dark',w:22,h:22}],['Колонка / диджей','d',{t:'dark',w:22,h:50,label:'колонка'}],
+ ['Бар','d',{t:'bar',w:140,h:36,label:'бар'}],['Барный стул','d',{t:'stool',w:12,h:12}],['Танцпол','d',{t:'dance',w:150,h:180,label:'танцпол'}],
+ ['Надпись','d',{t:'text',w:0,h:0,label:'надпись'}],['Комната','d',{t:'roomg',w:300,h:240}],['Аквариум','d',{t:'aqua',w:90,h:24}]];
+function palIcon(k,o){
+ if(k==='t')return `<svg width="34" height="28" viewBox="-17 -14 34 28">${o.shape==='round'?'<circle r="10" fill="var(--em)"/>':`<rect x="-13" y="-9" width="26" height="18" rx="6" fill="var(--em)"/>`}</svg>`;
+ const c={sofa:'var(--sofa)',sofab:'var(--bord)',sofag:'#9fb6a2',wall:'var(--wall)',dark:'var(--dk)',bar:'var(--dk)',stool:'var(--dk)',dance:'var(--wall)',roomg:'var(--vipg)',aqua:'#8fc3c9'}[o.t];
+ if(o.t==='text')return `<svg width="34" height="28" viewBox="0 0 34 28"><text x="17" y="19" text-anchor="middle" font-size="16" font-weight="800" fill="var(--mut)">Аа</text></svg>`;
+ return `<svg width="34" height="28" viewBox="-17 -14 34 28">${o.t==='stool'?`<circle r="6" fill="${c}"/>`:o.t==='dance'?`<ellipse rx="14" ry="10" fill="${c}" stroke="var(--mut)" stroke-dasharray="3 2"/>`:`<rect x="-15" y="-5" width="30" height="10" rx="5" fill="${c}" stroke="var(--line)"/>`}</svg>`;
+}
+const nextNum=()=>{const nums=S.tables.map(t=>parseInt(t.n,10)).filter(n=>!isNaN(n));return String((nums.length?Math.max(...nums):0)+1)};
+function viewCenter(){
+ const svg=$('#mapsvg'),z=zone(ui.zone);if(!svg)return[180,z.h/2];
+ const r=svg.getBoundingClientRect();
+ return[clamp(Math.round(((innerWidth/2-r.left)/r.width*360)/5)*5,30,330),clamp(Math.round(((innerHeight*.3-r.top)/r.height*z.h)/5)*5,30,z.h-30)];
+}
+
+/* ---------- sheets ---------- */
+const openSheet=h=>{const ex=sheetBox.querySelector('.sheet'),html=`<div class="grab"></div>${h}`;
+ if(ex){const t0=ex.querySelector('h2')?.textContent;morphInto(ex,html);if(ex.querySelector('h2')?.textContent!==t0)ex.scrollTop=0}
+ else sheetBox.innerHTML=`<div class="sheet-bg" data-act="close-bg"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`};
+const closeSheet=()=>{sheetBox.innerHTML='';ui.nb=null;ui.tmp=null};
+const shead=(t,sub)=>`<div class="shead"><div><h2>${t}</h2>${sub?`<div class="note" style="margin:2px 0 0">${sub}</div>`:''}</div><button class="xbtn" data-act="close" aria-label="Закрыть">${ic('x',20,2)}</button></div>`;
+function heroHTML(t,stTxt){const src=photoSrc(t.photo);return `<div class="hero">${src?`<img src="${src}" alt="">`:''}${stTxt?`<span class="st">${stTxt}</span>`:''}</div>`}
+function guestTableSheet(t,p){
+ openSheet(`${shead(`Стол №${esc(t.n)}`,esc(zname(t.zone)))}${heroHTML(t,p.st==='mg'?'Сдвинем столы под вас':'Свободен')}
+ <div class="facts"><span>${ic('users',20)}${t.seats} ${plural(t.seats,'место','места','мест')}</span>${maxCap(t)>t.seats?`<span>${ic('swap',20)}до ${maxCap(t)} со сдвигом</span>`:''}${t.deposit?`<span>${ic('money',20)}депозит ${Number(t.deposit).toLocaleString('ru-RU')} ₸</span>`:''}</div>
+ ${t.desc?`<p style="margin:10px 2px 0">${esc(t.desc)}</p>`:''}
+ ${p.joined?.length?`<p class="note">Для ${gw(ui.g)} сдвинем со столами ${p.joined.map(i=>esc(tab(i).n)).join(', ')}.</p>`:''}
+ <div class="sec"><button class="btn" data-act="pick" data-id="${esc(t.id)}">Выбрать этот стол</button></div>`);
+}
+function hostTableSheet(t){
+ const st=tableAt(t,ui.adate,ui.T),L=S.bk.filter(b=>b.date===ui.adate&&ACT(b)&&(b.table===t.id||b.joined.includes(t.id))).sort((a,b)=>bs(a)-bs(b));
+ openSheet(`${shead(`Столик №${esc(t.n)}`,esc(zname(t.zone)))}${heroHTML(t,`${st.txt}${ui.adate!==bizToday()?' · '+short(ui.adate):''}`)}
+ <div class="facts"><span>${ic('users',20)}${t.seats} ${plural(t.seats,'место','места','мест')}</span>${maxCap(t)>t.seats?`<span>${ic('swap',20)}до ${maxCap(t)}</span>`:''}${t.deposit?`<span>${ic('money',20)}${Number(t.deposit).toLocaleString('ru-RU')} ₸</span>`:''}</div>
+ ${t.desc?`<p style="margin:10px 2px 0">${esc(t.desc)}</p>`:''}
+ <div class="lab" style="margin-top:16px">Брони на ${short(ui.adate)}</div>
+ ${L.length?L.map(b=>`<button class="trow" data-act="bsheet" data-id="${b.id}"><span><b>${b.time}–${hm(be(b))}</b> · ${esc(b.name)}, ${b.guests} чел.</span><span class="sp ${b.status}">${ST[b.status]}</span></button>`).join(''):'<p class="note">Броней нет</p>'}
+ <div class="sec" style="display:grid;gap:10px"><button class="btn acc" data-act="nb-open" data-id="${esc(t.id)}">${ic('cal',20)}Забронировать на ${hm(ui.T)}</button>
+ <button class="btn" data-act="walkin" data-id="${esc(t.id)}" ${st.k==='free'?'':'disabled'}>${ic('enter',20)}Посадить гостей без брони</button>
+ <button class="btn gl" data-act="props" data-id="${esc(t.id)}">${ic('camera',20)}Фото и описание</button></div>
+ <p class="note" style="text-align:center">${st.k==='free'?'Время берётся с ползунка на экране «Столы».':'Сейчас стол занят — посадить без брони нельзя.'}</p>`);
+}
+function bookingSheet(b){
+ const t=tab(b.table),names=[b.table,...b.joined].map(i=>esc(tab(i)?.n||'?')).join(' + ');
+ const sb=(k,lab,icn)=>`<button class="sbtn ${k} ${b.status===k?'on':''}" data-act="bstatus" data-id="${b.id}" data-v="${k}">${icn?ic(icn,18,2):''}${lab}</button>`;
+ openSheet(`${shead(`Заявка №${b.no}`,`${human(b.date)} · ${SRC[b.source]||''}`)}
+ <div class="glass card" style="margin-top:8px"><div class="bhead"><div><b>Стол №${names}</b><span class="z">${esc(zname(t?.zone))}</span></div><span class="sp ${b.status}">${ST[b.status]}</span></div>
+ <div class="bwho" style="font-size:16px">${esc(b.name)}${b.occ?` <span class="occtag">${ic('party',14)}${esc(b.occ)}</span>`:''}</div>
+ <div class="pgrid"><div class="ctl"><span>Гостей</span><button data-act="bguests" data-id="${b.id}" data-v="-1">−</button><b>${b.guests}</b><button data-act="bguests" data-id="${b.id}" data-v="1">+</button></div></div>
+ ${b.phone?`<div class="acts"><a href="tel:+${digits(b.phone)}">${ic('phone',18)}${esc(b.phone)}</a><a href="${waLink(b)}" target="_blank" rel="noopener">${ic('chat',18)}WhatsApp</a></div>`:''}
+ ${b.comment?`<p class="note">${esc(b.comment)}</p>`:''}${timeline(b,true)}</div>
+ <div class="sgrid">${sb('new','Новая')}${sb('wait','Ожидаем','clock')}${sb('open','Сели','enter')}${sb('closed','Ушли','check')}</div>
+ <div class="sgrid"><button class="sbtn" data-act="move" data-id="${b.id}">${ic('swap',18)}Пересадить</button><button class="sbtn" data-act="btime" data-id="${b.id}">${ic('clock',18)}Продлить / сдвинуть</button></div>
+ <div class="sgrid">${b.status==='cancelled'?`<button class="sbtn" data-act="bstatus" data-id="${b.id}" data-v="new">Вернуть заявку</button>`:`<button class="sbtn warn" data-act="bcancel" data-id="${b.id}">${ic('x',18,2)}Отменить бронь</button>`}</div>`);
+}
+function moveSheet(b){
+ const s=bs(b),e=be(b);
+ const L=S.tables.map(t=>({t,p:plan(t,b.date,s,e,b.guests,b.id)})).filter(x=>['ok','mg'].includes(x.p.st)&&x.t.id!==b.table);
+ openSheet(`${shead('Пересадить',`${b.time}–${hm(e)} · ${b.guests} чел.`)}
+ ${L.length?L.map(({t,p})=>`<button class="trow" data-act="moveto" data-id="${b.id}" data-v="${esc(t.id)}"><span><b>Стол №${esc(t.n)}</b> · ${esc(zname(t.zone))}${p.joined.length?` <span class="note">+ ${p.joined.map(i=>esc(tab(i).n)).join(', ')}</span>`:''}</span><span class="note" style="margin:0">${t.seats} м ${ic('chev',18)}</span></button>`).join(''):'<p class="note">На это время свободных подходящих столов нет.</p>'}
+ <div class="acts"><button data-act="bsheet" data-id="${b.id}">${ic('back',18)}Назад</button></div>`);
+}
+function timeSheet(b){
+ const tm=ui.tmp,s=tm.s,e=tm.d?s+tm.d:C(),clash=[b.table,...b.joined].some(i=>covering(i,b.date,s,e,b.id));
+ const btn=(v,lab,dis)=>`<button data-act="tadj" data-v="${v}" ${dis?'disabled':''}>${lab}</button>`;
+ openSheet(`${shead('Продлить или сдвинуть',`Стол №${esc(tab(b.table)?.n||'')}`)}
+ <div class="glass card" style="text-align:center"><div style="font-size:30px;font-weight:800">${hm(s)} – ${hm(e)}</div><div class="note">${durTxt(tm.d)}</div>${timeline({...b,time:hm(s),dur:tm.d},true)}</div>
+ <div class="lab" style="margin-top:16px">Начало</div><div class="acts" style="margin-top:0">${btn('s:-30','−30 мин',s-30<O())}${btn('s:30','+30 мин',tm.d&&tm.d<=30)}</div>
+ <div class="lab" style="margin-top:14px">Конец</div><div class="acts" style="margin-top:0">${btn('e:-30','−30 мин',!tm.d||tm.d<=30)}${btn('e:30','+30 мин',!tm.d||e+30>C())}${btn('e:0',tm.d?'До закрытия':'По времени')}</div>
+ ${clash?'<div class="err">На это время стол уже занят другой бронью</div>':''}
+ <div class="sec"><button class="btn" data-act="tsave" data-id="${b.id}" ${clash?'disabled':''}>Сохранить</button></div><div class="acts"><button data-act="bsheet" data-id="${b.id}">${ic('back',18)}Назад</button></div>`);
+}
+function nbSheet(){
+ const n=ui.nb,s=toAbs(n.time),e=n.dur?s+n.dur:C();
+ const L=S.tables.map(t=>({t,p:plan(t,n.date,s,e,n.g)})).filter(x=>['ok','mg'].includes(x.p.st));
+ if(n.table&&!L.find(x=>x.t.id===n.table))n.table=null;
+ openSheet(`${shead('Новая бронь',human(n.date))}
+ <div class="row"><label class="f">Время<select id="nb-time">${slots(15,30).map(x=>`<option ${hm(x)===n.time?'selected':''}>${hm(x)}</option>`).join('')}</select></label>
+ <label class="f">Гостей<div class="stepper" style="margin-top:6px"><button class="rbtn" data-act="nb-g" data-v="-1" aria-label="Меньше"><b style="font-size:22px">−</b></button><output style="font-size:24px">${n.g}</output><button class="rbtn" data-act="nb-g" data-v="1" aria-label="Больше">${ic('plus',20,2.2)}</button></div></label></div>
+ <div class="lab" style="margin-top:14px">На сколько</div><div class="chips">${DURS.map(d=>`<button class="chip pill ${d===n.dur?'on':''}" data-act="nb-dur" data-v="${d}">${durTxt(d)}</button>`).join('')}</div>
+ <div class="lab" style="margin-top:10px">Стол</div><div class="chips">${L.length?L.map(({t,p})=>`<button class="chip ${n.table===t.id?'on':''}" data-act="nb-t" data-v="${esc(t.id)}">№${esc(t.n)}<small>${p.joined.length?'сдвинем':t.seats+' м'}</small></button>`).join(''):'<span class="note">Свободных подходящих столов нет</span>'}</div>
+ <label class="f">Имя<input id="nb-name" value="${esc(n.name)}" placeholder="Имя гостя"></label>
+ <label class="f">Телефон<input id="nb-phone" class="phone" type="tel" inputmode="numeric" value="${esc(n.phone||'+7 ')}" placeholder="+7 (7__) ___-__-__"></label>
+ <label class="f">Комментарий<input id="nb-comment" value="${esc(n.comment)}" placeholder="Необязательно"></label>
+ ${n.err?`<div class="err">${esc(n.err)}</div>`:''}
+ <div class="sec"><button class="btn acc" data-act="nb-save">Забронировать</button></div>`);
+}
+function propsSheet(t){
+ const src=photoSrc(t.photo);
+ openSheet(`${shead(`Стол №${esc(t.n)}`,'Фото и описание для гостей')}${heroHTML(t,'')}
+ <div class="acts"><label class="btn sm gl" style="cursor:pointer">${ic('camera',18)}${src?'Заменить фото':'Загрузить фото'}<input type="file" accept="image/*" id="p-photo" data-id="${esc(t.id)}" hidden></label>${src?`<button class="warn" data-act="photo-del" data-id="${esc(t.id)}">${ic('trash',18)}Убрать фото</button>`:''}</div>
+ <label class="f">Описание<textarea id="p-desc" rows="2" placeholder="Например: у окна, мягкий диван и два кресла">${esc(t.desc||'')}</textarea></label>
+ <label class="f">Депозит, ₸ <span style="color:var(--mut);font-weight:500">— 0, если нет</span><input id="p-dep" type="number" inputmode="numeric" min="0" step="1000" value="${t.deposit||0}"></label>
+ <div class="sec"><button class="btn" data-act="props-save" data-id="${esc(t.id)}">Сохранить</button></div>`);
+}
+
+const MONN=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+const calMax=()=>{const d=pdate(bizToday());d.setDate(d.getDate()+60);return ds(d)};
+const shiftD=(v,n)=>{const d=pdate(v);d.setDate(d.getDate()+n);return ds(d)};
+const calSel=()=>ui.calFor==='tables'?ui.adate:ui.calFor==='list'?ui.bday:ui.date;
+const calMin=()=>ui.calFor==='guest'?bizToday():shiftD(bizToday(),-60);
+const calTop=()=>ui.calFor==='guest'?calMax():shiftD(bizToday(),120);
+const dayOk=v=>v>=calMin()&&v<=calTop()&&(ui.calFor!=='guest'||slots(15,60).some(x=>slotOk(v,x)));
+function calSheet(){
+ const[y,mo]=ui.calM.split('-').map(Number),first=new Date(y,mo-1,1,12),lead=(first.getDay()+6)%7,n=new Date(y,mo,0).getDate(),sel=calSel(),host=ui.calFor!=='guest';
+ const ym=v=>v.slice(0,7),prevOk=ui.calM>ym(calMin()),nextOk=ui.calM<ym(calTop());
+ const cntD={};if(host)S.bk.forEach(b=>{if(ACT(b))cntD[b.date]=(cntD[b.date]||0)+1});
+ let cells='';for(let i=0;i<lead;i++)cells+='<span></span>';
+ for(let d=1;d<=n;d++){const v=`${y}-${pd(mo)}-${pd(d)}`,ok=dayOk(v);cells+=`<button class="cd ${v===sel?'on':''} ${v===ds(new Date())?'td':''}" data-act="cal-d" data-v="${v}" ${ok?'':'disabled'}>${d}${cntD[v]?`<i class="cdn">${cntD[v]}</i>`:''}</button>`}
+ const t0=ds(new Date()),q=[t0,shiftD(t0,1)].filter(dayOk);
+ const sat=(()=>{const d=pdate(t0);d.setDate(d.getDate()+((6-d.getDay()+7)%7||7));return ds(d)})();
+ openSheet(`${shead(ui.calFor==='list'?'Заявки на день':'Выберите дату',host?'Цифра под датой — сколько заявок':'')}
+ <div class="chips">${ui.calFor==='list'?`<button class="chip pill ${!ui.bday?'on':''}" data-act="cal-d" data-v="">Все дни</button>`:''}${q.map(v=>`<button class="chip pill ${v===sel?'on':''}" data-act="cal-d" data-v="${v}">${dayLabel(v)}</button>`).join('')}${!host&&dayOk(sat)&&!q.includes(sat)?`<button class="chip pill ${sat===sel?'on':''}" data-act="cal-d" data-v="${sat}">Суббота, ${pdate(sat).getDate()}</button>`:''}</div>
+ <div class="calh"><button class="xbtn" data-act="cal-m" data-v="-1" ${prevOk?'':'disabled'} aria-label="Прошлый месяц">${ic('back',20,2.2)}</button><b>${MONN[mo-1]} ${y}</b><button class="xbtn" data-act="cal-m" data-v="1" ${nextOk?'':'disabled'} aria-label="Следующий месяц">${ic('chev',20,2.2)}</button></div>
+ <div class="calg">${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(w=>`<span class="cw">${w}</span>`).join('')}${cells}</div>`);
+}
+const WH=48;
+function clockSheet(){
+ const valid=slots(15,60).filter(x=>slotOk(ui.date,x)),hours=[...new Set(valid.map(x=>Math.floor(x/60)))],mins=[0,15,30,45];
+ const cur=toAbs(ui.time);ui.wh={valid,hours,mins,h:Math.floor(cur/60),mi:cur%60};
+ if(!hours.includes(ui.wh.h)){ui.wh.h=hours[0];ui.wh.mi=valid[0]%60}
+ const col=(id,arr,f)=>`<div class="wheel" id="${id}"><div class="wsp"></div>${arr.map((v,i)=>`<div class="wi" data-act="wi" data-w="${id}" data-i="${i}">${f(v)}</div>`).join('')}<div class="wsp"></div></div>`;
+ openSheet(`${shead('Во сколько придёте?')}
+ <div class="wprev"><b id="wtime">${ui.time}</b><span class="note" id="wnote"></span></div>
+ <div class="wheels"><i class="band"></i>${col('wh-h',hours,h=>pd(h%24))}<span class="colon">:</span>${col('wh-m',mins,pd)}</div>
+ <p class="note" style="text-align:center">Крутите колёсики или нажмите на нужное число</p>
+ <div class="sec"><button class="btn" data-act="clock-ok">Готово</button></div>`);
+ const H=$('#wh-h'),M=$('#wh-m');
+ H.scrollTop=hours.indexOf(ui.wh.h)*WH;M.scrollTop=mins.indexOf(ui.wh.mi)*WH;
+ let tm;const onS=()=>{clearTimeout(tm);tm=setTimeout(wheelSync,90)};H.addEventListener('scroll',onS,{passive:true});M.addEventListener('scroll',onS,{passive:true});wheelSync(true);
+}
+function wheelSync(first){
+ const w=ui.wh,H=$('#wh-h'),M=$('#wh-m');if(!H||!M)return;
+ w.h=w.hours[clamp(Math.round(H.scrollTop/WH),0,w.hours.length-1)];w.mi=w.mins[clamp(Math.round(M.scrollTop/WH),0,3)];
+ M.querySelectorAll('.wi').forEach((el,i)=>el.classList.toggle('off',!w.valid.includes(w.h*60+w.mins[i])));
+ if(!w.valid.includes(w.h*60+w.mi)){const ok=w.mins.filter(x=>w.valid.includes(w.h*60+x));const nm=ok.reduce((a,b)=>Math.abs(b-w.mi)<Math.abs(a-w.mi)?b:a,ok[0]);w.mi=nm;M.scrollTo({top:w.mins.indexOf(nm)*WH,behavior:first?'auto':'smooth'})}
+ H.querySelectorAll('.wi').forEach((el,i)=>el.classList.toggle('on',w.hours[i]===w.h));M.querySelectorAll('.wi').forEach((el,i)=>el.classList.toggle('on',w.mins[i]===w.mi));
+ const t=w.h*60+w.mi;$('#wtime').textContent=hm(t);$('#wnote').textContent=`стол будет за вами до ${hm(t+S.set.dur<=C()?t+S.set.dur:C())}`;
+}
+
+function setHash(h){try{history.replaceState(null,'',h)}catch(e){}}
+/* ---------- smooth DOM update (без мерцания) ---------- */
+function morph(a,b){
+ if(a.nodeType!==b.nodeType||a.nodeName!==b.nodeName){a.replaceWith(b);return}
+ if(a.nodeType!==1){if(a.nodeValue!==b.nodeValue)a.nodeValue=b.nodeValue;return}
+ for(const at of [...a.attributes])if(!b.hasAttribute(at.name))a.removeAttribute(at.name);
+ for(const at of [...b.attributes])if(a.getAttribute(at.name)!==at.value)a.setAttribute(at.name,at.value);
+ morphChildren(a,b);
+ const tag=a.nodeName;if((tag==='INPUT'||tag==='TEXTAREA')&&a!==document.activeElement&&a.type!=='file'&&a.value!==b.value)a.value=b.value;
+ if(tag==='SELECT'){const o=b.querySelector('option[selected]');if(o&&a.value!==o.value)a.value=o.value}
+}
+function morphChildren(a,b){
+ const keyed=new Map();for(const c of a.children){const k=c.getAttribute('data-id');if(k)keyed.set(k,c)}
+ const bc=[...b.childNodes];let i=0;
+ for(const nb of bc){const cur=a.childNodes[i],k=nb.nodeType===1&&nb.getAttribute('data-id');
+  if(k&&keyed.has(k)){const old=keyed.get(k);keyed.delete(k);if(old!==cur)a.insertBefore(old,cur||null);morph(old,nb)}
+  else if(cur){const ck=cur.nodeType===1&&cur.getAttribute('data-id');if(ck)keyed.delete(ck);morph(cur,nb)}
+  else a.appendChild(nb);
+  i++}
+ while(a.childNodes.length>i)a.lastChild.remove();
+}
+function morphInto(el,html){const t=document.createElement('template');t.innerHTML=html;morphChildren(el,t.content)}
+
+/* ---------- render ---------- */
+function render(){
+ $('#rname').textContent=S.set.name;$('#raddr').textContent=ui.mode==='admin'?'хостес · '+(S.set.addr||''):'бронирование столов';
+ $('#m-guest').classList.toggle('on',ui.mode==='guest');$('#m-admin').classList.toggle('on',ui.mode==='admin');
+ morphInto(app,(ui.mode==='guest'?guest():host())+`<p class="demo">Демо-прототип. Схема не в масштабе. ${LS?'Данные хранятся только на этом устройстве.':'В этом режиме просмотра изменения пропадут после закрытия.'}</p>`);
+ let fx='';
+ if(ui.mode==='admin'&&ui.authed){
+  const nc=newCount();
+  fx=panel()+(ui.atab==='list'?`<button class="fab" data-act="nb-open" aria-label="Новая бронь">${ic('plus',28,2.4)}</button>`:'')+
+  `<nav class="tabbar glass">${[['tables','Столы','table'],['list','Заявки','list'],['edit','Схема','plan'],['set','Ещё','more']].map(([k,v,i])=>`<button class="${ui.atab===k?'on':''}" data-act="atab" data-v="${k}">${ic(i,24)}${v}${k==='list'&&nc?`<span class="badge">${nc}</span>`:''}</button>`).join('')}</nav>`;
+ }
+ if(fixedBox._h!==fx){morphInto(fixedBox,fx);fixedBox._h=fx}
+ document.body.classList.toggle('haspanel',!!fixedBox.querySelector('.panel'));
+ bindDrag();
+ const it=document.querySelector('.panel')&&ui.esel&&document.querySelector(`#mapsvg [data-id="${CSS.escape(ui.esel.id)}"]`);
+ if(it){const r=it.getBoundingClientRect(),lim=innerHeight-document.querySelector('.panel').offsetHeight-100;if(r.bottom>lim||r.top<80)window.scrollBy({top:r.top-Math.max(90,(lim-r.height)/2),behavior:'smooth'})}
+ document.querySelectorAll('.chips .chip.on,.days .dchip.on').forEach(c=>{const p=c.parentElement,cr=c.getBoundingClientRect(),pr=p.getBoundingClientRect();if(cr.left<pr.left||cr.right>pr.right)p.scrollLeft+=cr.left-pr.left-(pr.width-cr.width)/2});
+}
+function toast(t){const el=document.createElement('div');el.className='toast';el.textContent=t;document.body.append(el);setTimeout(()=>el.remove(),2600)}
+const top0=()=>window.scrollTo(0,0);
+const twice=(el,txt)=>{if(el.dataset.sure)return true;el.dataset.sure=1;el.lastChild.nodeType===3?el.lastChild.textContent=txt:el.textContent=txt;return false};
+const resetSel=()=>{ui.sel=null;ui.selJ=[]};
+const commit=()=>{save();render()};
+const bk=id=>S.bk.find(x=>x.id===id);
+const nextNo=()=>{S.seq=(S.seq||1300)+1;return S.seq};
+function resizeImg(file,cb){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,640/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.72))};im.onerror=()=>toast('Не получилось открыть фото');im.src=r.result};r.readAsDataURL(file)}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+ const el=e.target.closest('[data-act]');if(!el)return;
+ const a=el.dataset.act,v=el.dataset.v,id=el.dataset.id,it=curItem(),isT=ui.esel?.k==='t';
+ switch(a){
+  case 'mode':ui.mode=v;ui.err='';ui.esel=null;closeSheet();setHash(v==='admin'?'#host':'#guest');render();top0();break;
+  case 'date':ui.date=v;pickTime();resetSel();render();break;
+  case 'time':ui.time=v;autoDur();resetSel();render();break;
+  case 'dur':ui.dur=+v;resetSel();render();break;
+  case 'g-':ui.g=Math.max(1,ui.g-1);resetSel();render();break;
+  case 'g+':ui.g=Math.min(40,ui.g+1);resetSel();render();break;
+  case 'go':{const n=+v;if(n===2&&ui.step===1&&!zoneFree(ui.zone)){const z=S.zones.find(z=>zoneFree(z.id));if(z)ui.zone=z.id}
+   if(n===3&&!ui.sel)return;ui.step=n;ui.err='';render();top0();break}
+  case 'zone':ui.zone=v;ui.esel=null;render();break;
+  case 'table':{const t=tab(id);if(ui.mode==='admin')return hostTableSheet(t);
+   const p=plan(t,ui.date,gS(),gE(),ui.g);
+   if(p.st==='bz')toast('Этот стол уже занят на это время');
+   else if(p.st==='sm')toast(`Стол ${t.n} вмещает до ${p.max} — выберите другой`);
+   else guestTableSheet(t,p);break}
+  case 'occ-open':openSheet(`${shead('Какой повод?','Поможем подготовить стол. Можно не выбирать')}<div class="occ" style="margin-top:12px"><button class="chip pill ${!ui.form.occ?'on':''}" data-act="occ" data-v="">${!ui.form.occ?ic('check',16,2.6):''}Без повода</button>${OCC.map(o=>`<button class="chip pill ${ui.form.occ===o?'on':''}" data-act="occ" data-v="${esc(o)}">${ui.form.occ===o?ic('check',16,2.6):''}${o}</button>`).join('')}</div>`);break;
+  case 'occ':ui.form.occ=v||'';closeSheet();render();break;
+  case 'cm':ui.form.cm=true;render();setTimeout(()=>$('#f-comment')?.focus(),50);break;
+  case 'cal-open':ui.calFor=v||'guest';ui.calM=(calSel()||bizToday()).slice(0,7);calSheet();break;
+  case 'cal-m':{const[y,mo]=ui.calM.split('-').map(Number),d=new Date(y,mo-1+(+v),1,12);ui.calM=ds(d).slice(0,7);calSheet();break}
+  case 'cal-d':closeSheet();if(ui.calFor==='tables'){ui.adate=v;pickT()}else if(ui.calFor==='list'){ui.bday=v||null;ui.bf=null}else{ui.date=v;pickTime();resetSel()}render();break;
+  case 'bday':ui.bday=v||null;ui.bf=null;render();break;
+  case 'clock-open':clockSheet();break;
+  case 'wi':{const w=$('#'+el.dataset.w);w.scrollTo({top:+el.dataset.i*WH,behavior:'smooth'});break}
+  case 'clock-ok':{wheelSync();const t=ui.wh.h*60+ui.wh.mi;ui.time=hm(ui.wh.valid.includes(t)?t:ui.wh.valid[0]);autoDur();resetSel();closeSheet();render();break}
+  case 'pick':{const t=tab(id),p=plan(t,ui.date,gS(),gE(),ui.g);ui.sel=t.id;ui.selJ=p.joined||[];closeSheet();ui.step=3;ui.err='';render();top0();break}
+  case 'book':{const f=ui.form,t=tab(ui.sel);
+   if(f.name.trim().length<2){ui.err='Напишите имя';return render()}
+   {const pe=phoneErr(f.phone);if(pe){ui.err=pe;return render()}}
+   const p=plan(t,ui.date,gS(),gE(),ui.g);
+   if(!['ok','mg'].includes(p.st)){resetSel();ui.step=2;render();return toast('Пока вы заполняли, стол заняли. Выберите другой')}
+   const b={id:uid('b'),no:nextNo(),table:t.id,joined:p.joined,date:ui.date,time:ui.time,dur:ui.dur,guests:ui.g,name:f.name.trim(),phone:f.phone.trim(),comment:f.comment.trim(),occ:f.occ||'',status:ui.via?'wait':'new',source:ui.via?'host':'online',created:Date.now()};
+   S.bk.push(b);save();ui.done=b;ui.step=4;ui.err='';ui.form={name:'',phone:'',comment:'',occ:'',cm:false};resetSel();render();top0();break}
+  case 'new':ui.step=1;ui.done=null;render();top0();break;
+  case 'via-exit':ui.via=false;ui.step=1;ui.done=null;resetSel();ui.mode='admin';setHash('#host');render();top0();break;
+  case 'pin':if(($('#pin')?.value||'')===S.set.pin){ui.authed=true;ui.err=''}else ui.err='Неверный PIN';render();break;
+  case 'atab':ui.atab=v;ui.err='';ui.esel=null;ui.json='';render();top0();break;
+  case 'adate':ui.adate=v;pickT();render();break;
+  case 'tview':ui.tview=v;render();break;
+  case 'tsort':ui.tsort=v;render();break;
+  case 'tzone':ui.tzone=v;render();break;
+  case 'tsheet':hostTableSheet(tab(id));break;
+  case 'bseg':ui.bseg=v;ui.bf=null;render();break;
+  case 'bf':ui.bf=v&&ui.bf!==v?v:null;ui.bseg='act';render();break;
+  case 'banq':ui.banq=!ui.banq;render();break;
+  case 'bsheet':bookingSheet(bk(id));break;
+  case 'bstatus':{const b=bk(id);
+   if(ACT({status:v})&&!ACT(b)&&[b.table,...b.joined].some(t=>covering(t,b.date,bs(b),be(b),b.id)))return toast('Стол уже занят другой бронью — сначала пересадите');
+   if(v==='closed'&&b.date===bizToday()&&nowAbs()<be(b)&&nowAbs()>bs(b))b.dur=Math.max(15,nowAbs()-bs(b));
+   b.status=v;save();render();bookingSheet(b);toast(ST[v]);break}
+  case 'bcancel':{if(!twice(el,'Нажмите ещё раз'))return;const b=bk(id);b.status='cancelled';save();render();bookingSheet(b);toast('Бронь отменена');break}
+  case 'bguests':{const b=bk(id);b.guests=clamp(b.guests+(+v),1,60);save();render();bookingSheet(b);
+   const cap=[b.table,...b.joined].reduce((s,i)=>s+(tab(i)?.seats||0),0);if(+v>0&&b.guests>cap)toast(`За столом ${cap} мест — сдвиньте столы или пересадите`);break}
+  case 'move':moveSheet(bk(id));break;
+  case 'moveto':{const b=bk(id),t=tab(v),p=plan(t,b.date,bs(b),be(b),b.guests,b.id);if(!['ok','mg'].includes(p.st))return toast('Стол уже занят');b.table=t.id;b.joined=p.joined;save();render();bookingSheet(b);toast(`Пересадили за стол ${t.n}`);break}
+  case 'btime':{const b=bk(id);ui.tmp={id:b.id,s:bs(b),d:b.dur};timeSheet(b);break}
+  case 'tadj':{const tm=ui.tmp,b=bk(tm.id),[k,x]=v.split(':'),n=+x;
+   if(k==='s'){tm.s=clamp(tm.s+n,O(),C()-30);if(tm.d)tm.d=Math.max(30,tm.d-n)}else if(n===0){tm.d=tm.d?0:Math.max(30,Math.min(S.set.dur,C()-tm.s))}else tm.d=clamp(tm.d+n,30,C()-tm.s);
+   timeSheet(b);break}
+  case 'tsave':{const b=bk(id),tm=ui.tmp;b.time=hm(tm.s);b.dur=tm.d;save();render();bookingSheet(b);toast('Время изменено');break}
+  case 'nb-open':{const t=id?tab(id):null;ui.nb={date:ui.atab==='list'?(ui.bday||bizToday()):ui.adate,time:hm(ui.atab==='tables'?ui.T:clamp(Math.ceil(nowAbs()/15)*15,O(),C()-30)),dur:S.set.dur,g:t?Math.min(t.seats,4):2,table:t?t.id:null,name:'',phone:'',comment:''};
+   if(ui.nb.date!==bizToday()&&ui.atab!=='tables')ui.nb.time='19:00';if(toAbs(ui.nb.time)+ui.nb.dur>C())ui.nb.dur=0;nbSheet();break}
+  case 'nb-g':ui.nb.g=clamp(ui.nb.g+(+v),1,60);nbSheet();break;
+  case 'nb-dur':ui.nb.dur=+v;nbSheet();break;
+  case 'nb-t':ui.nb.table=v;nbSheet();break;
+  case 'nb-save':{const n=ui.nb;if(!n.table){n.err='Выберите стол';return nbSheet()}if(n.name.trim().length<2){n.err='Напишите имя гостя';return nbSheet()}if(phoneDigits(n.phone)&&phoneErr(n.phone)){n.err=phoneErr(n.phone);return nbSheet()}
+   const t=tab(n.table),s=toAbs(n.time),p=plan(t,n.date,s,n.dur?s+n.dur:C(),n.g);if(!['ok','mg'].includes(p.st)){n.err='Стол уже занят';return nbSheet()}
+   const b={id:uid('b'),no:nextNo(),table:t.id,joined:p.joined,date:n.date,time:n.time,dur:n.dur,guests:n.g,name:n.name.trim(),phone:phoneDigits(n.phone)?n.phone.trim():'',comment:n.comment.trim(),status:'wait',source:'host',created:Date.now()};
+   S.bk.push(b);closeSheet();ui.adate=b.date;if(ui.bday)ui.bday=b.date;commit();toast(`Бронь №${b.no} создана`);break}
+  case 'walkin':{const t=tab(id),T=ui.T,st=tableAt(t,ui.adate,T);if(st.k!=='free')return toast('Стол занят');
+   let d=Math.min(S.set.dur,C()-T);if(st.next)d=Math.min(d,bs(st.next)-T);
+   const b={id:uid('b'),no:nextNo(),table:t.id,joined:[],date:ui.adate,time:hm(T),dur:d,guests:t.seats,name:'Гости без брони',phone:'',comment:'',status:'open',source:'walkin',created:Date.now()};
+   S.bk.push(b);commit();bookingSheet(b);toast(st.next?`Посадили. Стол свободен до ${st.next.time}`:'Посадили гостей');break}
+  case 'props':propsSheet(tab(id));break;
+  case 'props-save':{const t=tab(id);t.desc=$('#p-desc').value.trim();t.deposit=Math.max(0,parseInt($('#p-dep').value,10)||0);closeSheet();commit();toast('Сохранено');break}
+  case 'photo-del':{const t=tab(id);if(t.photo&&S.photos[t.photo])delete S.photos[t.photo];t.photo='';save();propsSheet(t);render();break}
+  /* editor */
+  case 'sel-close':ui.esel=null;render();break;
+  case 'add':openSheet(`${shead('Добавить на схему','Появится в середине экрана — потом перетащите на место')}<div class="pal">${PAL.map((p,i)=>`<button data-act="add-item" data-v="${i}">${palIcon(p[1],p[2])}${p[0]}</button>`).join('')}</div>`);break;
+  case 'add-item':{const[,k,o]=PAL[+v],[x,y]=viewCenter();snap();
+   if(k==='t'){const t={id:uid('t'),n:nextNum(),zone:ui.zone,x,y,w:o.w,h:o.h,shape:o.shape,seats:o.seats,join:[]};S.tables.push(t);ui.esel={k:'t',id:t.id}}
+   else{const d={id:uid('d'),z:ui.zone,x,y,label:'',rot:0,...o};S.decor.push(d);ui.esel={k:'d',id:d.id}}
+   closeSheet();commit();break}
+  case 'undo':{const p=undo.pop();if(!p)return;const o=JSON.parse(p);S.zones=o.z;S.tables=o.t;S.decor=o.d;if(!zone(ui.zone))ui.zone=S.zones[0].id;if(!curItem())ui.esel=null;commit();toast('Отменено');break}
+  case 'zoom':ui.zoom=clamp(ui.zoom+ +v,1,3);render();break;
+  case 'p-seat':if(!it)return;snap();it.seats=clamp(it.seats+(+v.split(':')[1]),1,40);commit();break;
+  case 'p-shape':if(!it)return;snap();it.shape=v;if(v==='round'){const s=Math.max(20,Math.min(it.w,it.h));it.w=it.h=s}commit();break;
+  case 'p-size':{if(!it)return;const[k,dir]=v.split(':'),step=(it[k]>=100?10:it[k]>=30?5:2)*(+dir),mn=isT?20:4;snap();
+   const round=isT?it.shape==='round':it.t==='stool';
+   if(round){it.w=it.h=clamp(it.w+step,mn,400)}else it[k]=clamp(it[k]+step,mn,600);commit();break}
+  case 'mv':{if(!it)return;const[dx,dy]=v.split(',').map(Number),z=zone(isT?it.zone:it.z);snap();it.x=clamp(it.x+dx,0,360);it.y=clamp(it.y+dy,0,z.h);commit();break}
+  case 'rot':if(!it)return;snap();if(!isT&&it.t==='text')it.rot=it.rot?0:-90;else{[it.w,it.h]=[it.h,it.w];if(isT&&it.sa)it.sa=it.sa==='v'?'h':'v'}commit();break;
+  case 'dup':{if(!it)return;snap();const c=JSON.parse(JSON.stringify(it));c.x=clamp(c.x+20,0,360);c.y+=20;
+   if(isT){c.id=uid('t');c.n=nextNum();c.join=[];S.tables.push(c);ui.esel={k:'t',id:c.id}}else{c.id=uid('d');S.decor.push(c);ui.esel={k:'d',id:c.id}}commit();break}
+  case 'back':if(!it||isT)return;snap();S.decor=[it,...S.decor.filter(d=>d!==it)];commit();break;
+  case 'del':if(!it)return;if(!twice(el,'Ещё раз'))return;snap();
+   if(isT){S.tables=S.tables.filter(t=>t!==it);S.tables.forEach(t=>t.join=t.join.filter(x=>x!==it.id))}else S.decor=S.decor.filter(d=>d!==it);
+   ui.esel=null;commit();toast('Удалено');break;
+  case 'p-join':{if(!it)return;snap();const o=tab(id),on=it.join.includes(id);
+   it.join=on?it.join.filter(x=>x!==id):[...it.join,id];o.join=on?o.join.filter(x=>x!==it.id):[...new Set([...o.join,it.id])];commit();break}
+  case 'z-add':{snap();const z={id:uid('z'),name:'Новая зона',h:400};S.zones.push(z);ui.zone=z.id;ui.esel=null;commit();toast('Зона добавлена — переименуйте её ниже');break}
+  case 'z-h':{const z=zone(ui.zone);snap();z.h=clamp(z.h+(+v),200,2000);commit();break}
+  case 'z-del':{if(S.zones.length<2)return toast('Нужна хотя бы одна зона');if(!twice(el,'Удалить со всеми столами?'))return;snap();
+   const zid=ui.zone,gone=S.tables.filter(t=>t.zone===zid).map(t=>t.id);S.zones=S.zones.filter(z=>z.id!==zid);S.tables=S.tables.filter(t=>t.zone!==zid);
+   S.tables.forEach(t=>t.join=t.join.filter(x=>!gone.includes(x)));S.decor=S.decor.filter(d=>d.z!==zid);ui.zone=S.zones[0].id;ui.esel=null;commit();break}
+  case 'copy-json':{const j=planJSON();ui.json='out';render();const ta=$('#j-out');if(ta){ta.focus();ta.select()}
+   if(navigator.clipboard)navigator.clipboard.writeText(j).then(()=>toast('Схема скопирована'),()=>toast('Выделите текст ниже и скопируйте вручную'));else toast('Выделите текст ниже и скопируйте вручную');break}
+  case 'show-in':ui.json=ui.json==='in'?'':'in';render();break;
+  case 'load-json':{try{const o=JSON.parse($('#j-in').value);
+    if(!Array.isArray(o.zones)||!o.zones.length||!Array.isArray(o.tables)||!Array.isArray(o.decor))throw 0;
+    snap();S.zones=o.zones;S.tables=o.tables.map(t=>({join:[],...t}));S.decor=o.decor;ui.zone=S.zones[0].id;ui.esel=null;ui.json='';commit();toast('Схема загружена')}
+   catch(err){toast('Не получилось прочитать схему — скопирован ли весь текст?')}break}
+  case 'reset-plan':if(!twice(el,'Нажмите ещё раз'))return;snap();S.zones=cp(PLAN.zones);S.tables=cp(PLAN.tables);S.decor=cp(PLAN.decor);ui.zone=S.zones[0].id;ui.esel=null;commit();toast('Схема сброшена');break;
+  case 'save-set':{const pin=$('#s-pin').value.trim(),o=$('#s-open').value,c=$('#s-close').value;
+   if(pin.length<4){ui.err='PIN — минимум 4 цифры';return render()}
+   if(!o||!c||o===c){ui.err='Проверьте часы работы';return render()}
+   Object.assign(S.set,{name:$('#s-name').value.trim()||'Ресторан',addr:$('#s-addr').value.trim(),open:o,close:c,dur:+$('#s-dur').value,pin});ui.err='';save();pickTime();pickT();render();toast('Сохранено');break}
+  case 'reset-all':if(!twice(el,'Нажмите ещё раз — всё сбросится'))return;S=fresh();undo=[];save();ui.atab='tables';ui.zone=S.zones[0].id;pickT();render();toast('Сброшено');break;
+  case 'close':closeSheet();break;
+  case 'close-bg':if(e.target===el)closeSheet();break;
+ }
+});
+document.addEventListener('change',e=>{
+ const id=e.target.id;
+ if(id==='p-label'){const it=curItem();if(!it)return;const v=e.target.value.trim();snap();if(ui.esel.k==='t'){if(v)it.n=v}else it.label=v;commit()}
+ if(id==='z-name'){const z=zone(ui.zone),v=e.target.value.trim();if(v){snap();z.name=v;commit()}}
+ if(id==='nb-time'){ui.nb.time=e.target.value;if(ui.nb.dur&&toAbs(ui.nb.time)+ui.nb.dur>C())ui.nb.dur=0;nbSheet()}
+ if(id==='p-photo'){const f=e.target.files[0],t=tab(e.target.dataset.id);if(!f||!t)return;resizeImg(f,url=>{const k=uid('ph');const old=t.photo;S.photos[k]=url;t.photo=k;if(!save()){delete S.photos[k];t.photo=old;return}if(old&&S.photos[old])delete S.photos[old];save();propsSheet(t);render();toast('Фото сохранено')})}
+});
+document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches?.('.tbl[data-act]')){e.preventDefault();e.target.dispatchEvent(new MouseEvent('click',{bubbles:true}))}
+ if(e.key==='Enter'&&e.target.id==='pin')$('[data-act="pin"]').click();
+ if(e.key==='Enter'&&e.target.id==='p-label')e.target.blur()});
+document.addEventListener('input',e=>{
+ if(e.target.classList?.contains('phone')){const el=e.target,f=fmtPhone(el.value);if(el.value!==f){el.value=f;try{el.setSelectionRange(f.length,f.length)}catch(_){}}}
+ const k={'f-name':'name','f-phone':'phone','f-comment':'comment'}[e.target.id];if(k)ui.form[k]=e.target.value;
+ const nk={'nb-name':'name','nb-phone':'phone','nb-comment':'comment'}[e.target.id];if(nk&&ui.nb)ui.nb[nk]=e.target.value;
+ if(e.target.id==='trange'){ui.T=+e.target.value;$('#tval').textContent='с '+hm(ui.T);morphInto($('#tlist'),tablesBody())}
+ if(e.target.id==='q'){ui.q=e.target.value;const L=document.createElement('div');L.innerHTML=hostList();morphInto($('#blist'),L.querySelector('#blist').innerHTML)}
+});
+document.addEventListener('focusin',e=>{if(e.target.classList?.contains('phone')){const el=e.target;if(!el.value)el.value='+7 ';setTimeout(()=>{try{el.setSelectionRange(el.value.length,el.value.length)}catch(_){}},0)}});
+document.addEventListener('keydown',e=>{const el=e.target;if(el.classList?.contains('phone')&&e.key==='Backspace'&&el.value.replace(/\D/g,'').length<=1){e.preventDefault()}});
+window.addEventListener('hashchange',()=>{const md=['#admin','#host','#editor'].includes(location.hash)?'admin':'guest';if(md!==ui.mode){ui.mode=md;render()}});
+
+let drag=null,bgTap=null;
+function bindDrag(){
+ if(!(ui.mode==='admin'&&ui.authed&&ui.atab==='edit'))return;
+ const svg=$('#mapsvg');if(!svg||svg._bound)return;svg._bound=true;const EDIT=()=>ui.mode==='admin'&&ui.atab==='edit';
+ const pt=e=>{const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(svg.getScreenCTM().inverse())};
+ svg.addEventListener('touchstart',e=>{if(EDIT()&&e.target.closest('.drag'))e.preventDefault()},{passive:false});
+ svg.addEventListener('pointerdown',e=>{
+  if(!EDIT())return;const g=e.target.closest('.drag');
+  if(!g){bgTap={x:e.clientX,y:e.clientY};return}
+  const k=g.dataset.k,item=k==='t'?tab(g.dataset.id):S.decor.find(d=>d.id===g.dataset.id);if(!item)return;
+  const p=pt(e);drag={k,item,g,dx:p.x-item.x,dy:p.y-item.y,sx:p.x,sy:p.y,moved:false};
+  try{svg.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
+ svg.addEventListener('pointermove',e=>{if(!drag)return;const p=pt(e);
+  if(!drag.moved){if(Math.hypot(p.x-drag.sx,p.y-drag.sy)<4)return;drag.moved=true;snap()}
+  const z=zone(ui.zone),r5=v=>Math.round(v/5)*5;drag.item.x=clamp(r5(p.x-drag.dx),0,360);drag.item.y=clamp(r5(p.y-drag.dy),0,z.h);
+  drag.g.setAttribute('transform',`translate(${drag.item.x},${drag.item.y})`)});
+ svg.addEventListener('pointerup',e=>{
+  if(drag){const d=drag;drag=null;ui.esel={k:d.k,id:d.item.id};if(d.moved)save();render();return}
+  if(bgTap&&Math.hypot(e.clientX-bgTap.x,e.clientY-bgTap.y)<6&&ui.esel){ui.esel=null;render()}bgTap=null});
+ svg.addEventListener('pointercancel',()=>{if(drag?.moved)save();drag=null;bgTap=null});
+}
+render();
+}
+</script>
+</body>
+</html>

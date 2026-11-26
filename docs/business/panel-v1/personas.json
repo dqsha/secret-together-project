@@ -1,0 +1,222 @@
+[
+ {
+  "id": "P001",
+  "name": "Omar",
+  "age": 25,
+  "segment": "Hired manager or administrator who decides together with the owner",
+  "income": 10000,
+  "behaviour": "WhatsApp-first",
+  "behaviour_how": "Almost all bookings arrive in WhatsApp and Instagram Direct and are answered personally.",
+  "objection": "Is this a real company? I do not want my guests' phone numbers on some unknown site",
+  "habit": "on weekday evenings half your tables are empty"
+ },
+ {
+  "id": "P002",
+  "name": "Raj",
+  "age": 33,
+  "segment": "Hired manager or administrator who decides together with the owner",
+  "income": 9000,
+  "behaviour": "Burned before",
+  "behaviour_how": "Paid for an app or a POS add-on before; the staff stopped using it within a month.",
+  "objection": "Most of my guests call or write in WhatsApp, they will not book on a website",
+  "habit": "you post the menu and events on Instagram and get booking requests in Direct"
+ },
+ {
+  "id": "P003",
+  "name": "Emil",
+  "age": 42,
+  "segment": "Owner of a large restaurant, banquet hall or karaoke complex",
+  "income": 66000,
+  "behaviour": "Banquet-heavy",
+  "behaviour_how": "Most revenue comes from toi, birthdays and banquets booked weeks ahead with a deposit.",
+  "objection": "Is this a real company? I do not want my guests' phone numbers on some unknown site",
+  "habit": "a big toi or birthday banquet is booked most weekends"
+ },
+ {
+  "id": "P004",
+  "name": "Owen",
+  "age": 55,
+  "segment": "Hired manager or administrator who decides together with the owner",
+  "income": 7000,
+  "behaviour": "Penny-pincher",
+  "behaviour_how": "Counts every tenge of monthly fees and cancels subscriptions that do not pay off fast.",
+  "objection": "No-shows are my real problem, and this does not stop them",
+  "habit": "your hostess changes every few months and each new one needs training"
+ },
+ {
+  "id": "P005",
+  "name": "Sana",
+  "age": 55,
+  "segment": "Owner of a small café or lounge (one hall, 10-20 tables)",
+  "income": 26000,
+  "behaviour": "WhatsApp-first",
+  "behaviour_how": "Almost all bookings arrive in WhatsApp and Instagram Direct and are answered personally.",
+  "objection": "We already have iiko and Kaspi, why another system",
+  "habit": "on Friday and Saturday evenings the venue is full and the phone does not stop"
+ },
+ {
+  "id": "P006",
+  "name": "Maya",
+  "age": 39,
+  "segment": "Owner of a small café or lounge (one hall, 10-20 tables)",
+  "income": 33000,
+  "behaviour": "WhatsApp-first",
+  "behaviour_how": "Almost all bookings arrive in WhatsApp and Instagram Direct and are answered personally.",
+  "objection": "No-shows are my real problem, and this does not stop them",
+  "habit": "your hostess changes every few months and each new one needs training"
+ },
+ {
+  "id": "P007",
+  "name": "Selin",
+  "age": 37,
+  "segment": "Hired manager or administrator who decides together with the owner",
+  "income": 10000,
+  "behaviour": "Banquet-heavy",
+  "behaviour_how": "Most revenue comes from toi, birthdays and banquets booked weeks ahead with a deposit.",
+  "objection": "If it breaks on Saturday night, who do I call?",
+  "habit": "on Friday and Saturday evenings the venue is full and the phone does not stop"
+ },
+ {
+  "id": "P008",
+  "name": "Ruby",
+  "age": 40,
+  "segment": "Owner of a small café or lounge (one hall, 10-20 tables)",
+  "income": 27000,
+  "behaviour": "Tech-curious",
+  "behaviour_how": "Already uses a POS like iiko or Quick Resto and Kaspi QR; likes tools that save staff time.",
+  "objection": "19 900 tenge every month for something a notebook does for free",
+  "habit": "on weekday evenings half your tables are empty"
+ },
+ {
+  "id": "P009",
+  "name": "Nora",
+  "age": 27,
+  "segment": "Hired manager or administrator who decides together with the owner",
+  "income": 15000,
+  "behaviour": "WhatsApp-first",
+  "behaviour_how": "Almost all bookings arrive in WhatsApp and Instagram Direct and are answered personally.",
+  "objection": "If it breaks on Saturday night, who do I call?",
+  "habit": "on weekday evenings half your tables are empty"
+ },
+ {
+  "id": "P010",
+  "name": "Fatima",
+  "age": 28,
+  "segment": "Owner of a small café or lounge (one hall, 10-20 tables)",
+  "income": 20000,
+  "behaviour": "Tech-curious",
+  "behaviour_how": "Already uses a POS like iiko or Quick Resto and Kaspi QR; likes tools that save staff time.",
+  "objection": "19 900 tenge every month for something a notebook does for free",
+  "habit": "on Friday and Saturday evenings the venue is full and the phone does not stop"
+ },
+ {
+  "id": "P011",
+  "name": "Tariq",
+  "age": 25,
+  "segment": "Owner of a large restaurant, banquet hall or karaoke complex",
+  "income": 83000,
+  "behaviour": "Notebook loyalist",
+  "behaviour_how": "The hostess writes every booking in a paper notebook; it has worked for years.",
+  "objection": "Is this a real company? I do not want my guests' phone numbers on some unknown site",
+  "habit": "on Friday and Saturday evenings the venue is full and the phone does not stop"
+ },
+ {
+  "id": "P012",
+  "name": "Felix",
+  "age": 55,
+  "segment": "Owner of a small café or lounge (one hall, 10-20 tables)",
+  "income": 20000,
+  "behaviour": "Penny-pincher",
+  "behaviour_how": "Counts every tenge of monthly fees and cancels subscriptions that do not pay off fast.",
+  "objection": "19 900 tenge every month for something a notebook does for free",
+  "habit": "on Friday and Saturday evenings the venue is full and the phone does not stop"
+ },
+ {
+  "id": "P013",
+  "name": "Zoe",
+  "age": 52,
+  "segment": "Hired manager or administrator who decides together with the owner",
+  "income": 8000,
+  "behaviour": "Burned before",
+  "behaviour_how": "Paid for an app or a POS add-on before; the staff stopped using it within a month.",
+  "objection": "If it breaks on Saturday night, who do I call?",
+  "habit": "on weekday evenings half your tables are empty"
+ },
+ {
+  "id": "P014",
+  "name": "Dev",
+  "age": 45,
+  "segment": "Owner of a large restaurant, banquet hall or karaoke complex",
+  "income": 56000,
+  "behaviour": "Penny-pincher",
+  "behaviour_how": "Counts every tenge of monthly fees and cancels subscriptions that do not pay off fast.",
+  "objection": "My hostess will not use another app on a busy Saturday",
+  "habit": "your hostess changes every few months and each new one needs training"
+ },
+ {
+  "id": "P015",
+  "name": "Yusuf",
+  "age": 36,
+  "segment": "Owner of a large restaurant, banquet hall or karaoke complex",
+  "income": 75000,
+  "behaviour": "Banquet-heavy",
+  "behaviour_how": "Most revenue comes from toi, birthdays and banquets booked weeks ahead with a deposit.",
+  "objection": "19 900 tenge every month for something a notebook does for free",
+  "habit": "you post the menu and events on Instagram and get booking requests in Direct"
+ },
+ {
+  "id": "P016",
+  "name": "Theo",
+  "age": 39,
+  "segment": "Owner of a small café or lounge (one hall, 10-20 tables)",
+  "income": 23000,
+  "behaviour": "Notebook loyalist",
+  "behaviour_how": "The hostess writes every booking in a paper notebook; it has worked for years.",
+  "objection": "My hostess will not use another app on a busy Saturday",
+  "habit": "on Friday and Saturday evenings the venue is full and the phone does not stop"
+ },
+ {
+  "id": "P017",
+  "name": "Alma",
+  "age": 29,
+  "segment": "Owner of a small café or lounge (one hall, 10-20 tables)",
+  "income": 14000,
+  "behaviour": "Notebook loyalist",
+  "behaviour_how": "The hostess writes every booking in a paper notebook; it has worked for years.",
+  "objection": "My hostess will not use another app on a busy Saturday",
+  "habit": "a big toi or birthday banquet is booked most weekends"
+ },
+ {
+  "id": "P018",
+  "name": "Freya",
+  "age": 40,
+  "segment": "Owner of a large restaurant, banquet hall or karaoke complex",
+  "income": 105000,
+  "behaviour": "Tech-curious",
+  "behaviour_how": "Already uses a POS like iiko or Quick Resto and Kaspi QR; likes tools that save staff time.",
+  "objection": "Most of my guests call or write in WhatsApp, they will not book on a website",
+  "habit": "your hostess changes every few months and each new one needs training"
+ },
+ {
+  "id": "P019",
+  "name": "Harper",
+  "age": 25,
+  "segment": "Owner of a small café or lounge (one hall, 10-20 tables)",
+  "income": 17000,
+  "behaviour": "Burned before",
+  "behaviour_how": "Paid for an app or a POS add-on before; the staff stopped using it within a month.",
+  "objection": "Is this a real company? I do not want my guests' phone numbers on some unknown site",
+  "habit": "a big toi or birthday banquet is booked most weekends"
+ },
+ {
+  "id": "P020",
+  "name": "Emma",
+  "age": 29,
+  "segment": "Owner of a large restaurant, banquet hall or karaoke complex",
+  "income": 94000,
+  "behaviour": "Notebook loyalist",
+  "behaviour_how": "The hostess writes every booking in a paper notebook; it has worked for years.",
+  "objection": "19 900 tenge every month for something a notebook does for free",
+  "habit": "your hostess changes every few months and each new one needs training"
+ }
+]

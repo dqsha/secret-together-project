@@ -1,0 +1,169 @@
+{
+ "business": "Сервис бронирования столов со схемой зала (рабочее название), Актобе",
+ "seed": 7,
+ "dealt": 20,
+ "answered": 20,
+ "skipped": [],
+ "buys": 3,
+ "passes": 17,
+ "buy_rate": 0.15,
+ "by_segment": [
+  [
+   "Hired manager or administrator who decides together with the owner",
+   6,
+   0.3333333333333333
+  ],
+  [
+   "Owner of a large restaurant, banquet hall or karaoke complex",
+   6,
+   0.16666666666666666
+  ],
+  [
+   "Owner of a small café or lounge (one hall, 10-20 tables)",
+   8,
+   0.0
+  ]
+ ],
+ "by_behaviour": [
+  [
+   "Banquet-heavy",
+   3,
+   0.3333333333333333
+  ],
+  [
+   "Tech-curious",
+   3,
+   0.3333333333333333
+  ],
+  [
+   "WhatsApp-first",
+   4,
+   0.25
+  ],
+  [
+   "Burned before",
+   3,
+   0.0
+  ],
+  [
+   "Penny-pincher",
+   3,
+   0.0
+  ],
+  [
+   "Notebook loyalist",
+   4,
+   0.0
+  ]
+ ],
+ "by_income": [
+  [
+   "under $15,000",
+   6,
+   0.16666666666666666
+  ],
+  [
+   "$33,000 and up",
+   7,
+   0.14285714285714285
+  ],
+  [
+   "$15,000 to $33,000",
+   7,
+   0.14285714285714285
+  ]
+ ],
+ "why_not": [
+  [
+   "habit",
+   8,
+   [
+    "Most of my guests call or write in WhatsApp, they will not book on a website, and I already got burned once when staff dropped an app within a month. The hostess has her notebook and Direct, I do not want one more thing to check.",
+    "У нас уже есть iiko и Kaspi, а брони я сама веду в WhatsApp и Директе, и так всё работает. Зачем мне ещё одна система, которую учить хостес?"
+   ],
+   [
+    "P002",
+    "P005"
+   ]
+  ],
+  [
+   "trust",
+   5,
+   [
+    "I don't know this company, and I'm not putting my guests' phone numbers on some unknown site just because the first month is free. WhatsApp already works for us, and I'd have to talk to the owner anyway.",
+    "Мои банкеты и тои держатся на предоплате и на личных звонках, а тетрадь хостес меня пока не подводила. Не хочу отдавать номера гостей какому-то незнакомому сайту."
+   ],
+   [
+    "P001",
+    "P003"
+   ]
+  ],
+  [
+   "need",
+   3,
+   [
+    "Мой главный убыток это гости, которые бронируют и не приходят, а тут просто кнопка напоминания, которую хостес ещё должна не забыть нажать. Тетрадь у меня бесплатная, а 9 900 в месяц за то, что не решает неявки, я платить не буду.",
+    "My problem is guests who book and then don't come, and a book with a reminder button still leaves me or the hostess pressing it. Everything already comes to me in WhatsApp and Instagram and I answer it myself, so I don't see why I'd move it into another app."
+   ],
+   [
+    "P004",
+    "P006"
+   ]
+  ],
+  [
+   "price",
+   1,
+   [
+    "My notebook costs nothing and the hostess already knows it. I cancel anything that doesn't pay off fast, and I can't see how 9 900 tenge a month brings me more money than it takes."
+   ],
+   [
+    "P012"
+   ]
+  ]
+ ],
+ "why_yes": [
+  [
+   "trust",
+   2,
+   [
+    "Free month, no contract, and I can keep the notebook next to it for two weeks, so I lose nothing by trying. Phone support on Friday and Saturday night is the only reason I would even listen, and the banquet deposits in one place would help me.",
+    "Free month, free setup and I can keep the notebook next to it for two weeks, so I risk nothing but an hour of my time. Phone support on Friday and Saturday evening answers my main worry. I would still need the owner to say yes."
+   ],
+   [
+    "P007",
+    "P009"
+   ]
+  ],
+  [
+   "need",
+   1,
+   [
+    "Хостес у меня меняются каждые несколько месяцев, и каждую надо учить с нуля, а тут обучат за них и тетрадь можно вести параллельно. Первый месяц бесплатно, 9 900 для меня не деньги, так что попробую."
+   ],
+   [
+    "P018"
+   ]
+  ]
+ ],
+ "flip": [
+  "I'd need to visit the venue in Aktobe that already uses it, talk to its manager, and see my own hall's scheme working with the owner there. Then I'd try the free month next to the notebook.",
+  "Seeing it running live in another Aktobe venue with the hostess using it every Friday night, and the owner agreeing to a trial where WhatsApp bookings are entered in one tap and I can see staff actually use it for two weeks.",
+  "Увидеть вживую, в заведении в Актобе, которое я знаю, что оно работает у них не первый год, и поговорить с их владельцем; плюс договор с реквизитами и выгрузкой базы.",
+  "Proof from another venue in Aktobe, with numbers, that no-shows dropped noticeably (for example a prepayment or deposit that is taken automatically for table bookings), and a price that is clearly below what one empty table costs me on a Friday.",
+  "Если покажут вживую в заведении, которое я знаю, что это работает с моим WhatsApp и не дублирует iiko, и хостес освоит за один вечер без потерь броней.",
+  "Proof from another venue in Aktobe that no-shows actually fell, for example automatic reminders and prepayment on a table, with the hostess doing nothing extra.",
+  "Proof from another place in Aktobe, with numbers, that online booking brought in extra weekday guests, or booking built into my iiko so my staff don't enter things twice.",
+  "Увидеть вживую в соседнем заведении, что за пятницу брони через ссылку реально приходят и хостес не тратит на это больше времени, чем на тетрадь. Ещё чтобы это сходилось с моей кассой.",
+  "If another owner I know in Aktobe, whom I can call, told me he has used it for months without problems, and I saw it working in his venue.",
+  "Seeing another venue in Aktobe, with a hall like mine, whose no-shows fell and who earned back more than 9 900 tenge in a month. Or a price around 3 000-4 000 tenge.",
+  "Seeing it running in another Aktobe place like mine for a few months, talking to that manager, and getting a written promise that someone answers on Friday and Saturday night, with the hostesses actually using it during the free month.",
+  "Если покажут живьём в заведении в Актобе, что хостес освоит это за 10 минут, и я увижу в первый месяц, что меньше гостей не приходит, или цена будет около 5 000 в месяц.",
+  "Если бы я увидел вживую в другом заведении Актобе, что напоминания в WhatsApp реально сократили неявки на банкеты, и мне подтвердили бы это цифрами.",
+  "Seeing it work live in another venue in Aktobe on a full Saturday, with their hostess saying it is faster than the notebook, and me being able to cancel with no questions after the free month.",
+  "Another owner in Aktobe with a hall like mine, whom I can call, tells me his hostess uses it on Saturdays and has not gone back to the notebook. Or the hostess herself tries it for two weeks and asks to keep it.",
+  "Seeing it working live at a place in Aktobe I can visit and ask the owner myself. A real company name and a contract signed before I enter any guest data. Then my hostess tries it for two weeks next to the notebook and I don't pay anything.",
+  "Seeing it work live in another venue in Aktobe, with an owner I know telling me it cut no-shows and that a new hostess learned it in one shift."
+ ],
+ "purchases_first_month_per_buyer": 1.0,
+ "price_answers": 20
+}
